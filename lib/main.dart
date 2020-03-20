@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/google_client.dart';
+import 'package:youtube_extractor/youtube_extractor.dart';
+import 'package:googleapis/youtube/v3.dart' as yt;
+
+var extractor = YouTubeExtractor();
+
+void takeVideoStream() async {
+  var streamInfo = await extractor.getMediaStreamsAsync('a1ExYqrBJio');
+  // Print the audio stream url
+  print('Audio URL: ${streamInfo.video.first.url}');
+}
 
 void main() => runApp(MyApp());
 
@@ -26,12 +37,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  void search(String text) async {
+    print(text);
+    final ytClient = yt.YoutubeApi(client);
+    try {
+      var response = await ytClient.search.list('snippet', q: text);
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+      print(response.toJson());
+    } on yt.DetailedApiRequestError catch (e) {
+      e.errors.forEach((error) {
+        print(error.reason);
+      });
+    }
+
+    // takeVideoStream();
   }
 
   @override
@@ -40,25 +59,52 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.all(12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Cerca',
+              ),
+              onChanged: search,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    color: Colors.amber[600],
+                    child: const Center(child: Text('Entry A')),
+                  ),
+                  Container(
+                    height: 50,
+                    color: Colors.amber[500],
+                    child: const Center(child: Text('Entry B')),
+                  ),
+                  Container(
+                    height: 50,
+                    color: Colors.amber[100],
+                    child: const Center(child: Text('Entry C')),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
     );
+  }
+}
+
+class SearchElement extends StatelessWidget {
+  SearchElement(this.desc);
+
+  final String desc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text(desc));
   }
 }
