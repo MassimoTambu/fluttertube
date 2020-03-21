@@ -37,20 +37,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  yt.SearchListResponse _response;
+
+  bool _isLoading = false;
+
   void search(String text) async {
     print(text);
-    final ytClient = yt.YoutubeApi(client);
-    try {
-      var response = await ytClient.search.list('snippet', q: text);
-
-      print(response.toJson());
-    } on yt.DetailedApiRequestError catch (e) {
-      e.errors.forEach((error) {
-        print(error.reason);
+    if (text.length > 5) {
+      setState(() {
+        _isLoading = true;
       });
-    }
+      final ytClient = yt.YoutubeApi(client);
+      try {
+        var response = await ytClient.search.list('snippet', q: text);
 
+        setState(() {
+          _isLoading = false;
+          _response = response;
+        });
+      } on yt.DetailedApiRequestError catch (e) {
+        e.errors.forEach((error) {
+          print(error.reason);
+        });
+      }
+    }
     // takeVideoStream();
+  }
+
+  List<Widget> getListChildren() {
+    if (_isLoading) {
+      return [Container(child: CircularProgressIndicator(), height: double.infinity,),),];
+    } else if (_response != null) {
+      return _response.items.map((item) {
+        return SearchElement(item);
+      }).toList();
+    }
+    return [Container()];
   }
 
   @override
@@ -71,25 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onChanged: search,
             ),
             Expanded(
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    color: Colors.amber[600],
-                    child: const Center(child: Text('Entry A')),
-                  ),
-                  Container(
-                    height: 50,
-                    color: Colors.amber[500],
-                    child: const Center(child: Text('Entry B')),
-                  ),
-                  Container(
-                    height: 50,
-                    color: Colors.amber[100],
-                    child: const Center(child: Text('Entry C')),
-                  ),
-                ],
-              ),
+              child: ListView(children: getListChildren()),
             )
           ],
         ),
@@ -99,12 +103,19 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SearchElement extends StatelessWidget {
-  SearchElement(this.desc);
+  SearchElement(this.result);
 
-  final String desc;
+  final yt.SearchResult result;
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text(desc));
+    return Container(
+        child: Column(children: [
+      Text(result.snippet.title),
+      Text(result.snippet.channelTitle),
+      Text(result.snippet.description),
+      Text(result.snippet.publishedAt.toString()),
+      // Text(icon.result.snippet.thumbnails.medium),
+    ]));
   }
 }
