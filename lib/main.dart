@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/download_tab.dart';
 import 'package:fluttertube/google_client.dart';
-import 'package:youtube_extractor/youtube_extractor.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
-
-var extractor = YouTubeExtractor();
-
-void takeVideoStream() async {
-  var streamInfo = await extractor.getMediaStreamsAsync('a1ExYqrBJio');
-  // Print the audio stream url
-  print('Audio URL: ${streamInfo.video.first.url}');
-}
 
 void main() => runApp(MyApp());
 
@@ -118,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          Container(),
+          DownloadTab()
         ],
       ),
       bottomNavigationBar: TabBar(
