@@ -44,26 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
   String _errorMessage;
 
   void search(String text) async {
-    print(text);
-    if (text.length > 5) {
-      setState(() {
-        _isLoading = true;
-      });
-      final ytClient = yt.YoutubeApi(client);
-      try {
-        var response = await ytClient.search.list('snippet', q: text);
+    setState(() {
+      _isLoading = true;
+    });
+    final ytClient = yt.YoutubeApi(client);
+    try {
+      var response = await ytClient.search.list('snippet', q: text);
 
-        setState(() {
-          _isLoading = false;
-          _response = response;
-          _errorMessage = null;
-        });
-      } on yt.DetailedApiRequestError catch (e) {
-        setState(() {
-          _errorMessage = e.message;
-          _isLoading = false;
-        });
-      }
+      setState(() {
+        _isLoading = false;
+        _response = response;
+        _errorMessage = null;
+      });
+    } on yt.DetailedApiRequestError catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+        _isLoading = false;
+      });
     }
     // takeVideoStream();
   }
