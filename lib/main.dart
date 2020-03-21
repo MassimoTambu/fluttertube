@@ -18,12 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: DefaultTabController(
+          length: 2,
+          child: MyHomePage(title: 'Flutter Demo Home Page'),
+        ));
   }
 }
 
@@ -66,7 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> getListChildren() {
     if (_isLoading) {
-      return [Container(child: CircularProgressIndicator(), height: double.infinity,),),];
+      return [
+        Container(
+          child: CircularProgressIndicator(
+            strokeWidth: 10,
+          ),
+          height: 200.0,
+        ),
+      ];
     } else if (_response != null) {
       return _response.items.map((item) {
         return SearchElement(item);
@@ -81,22 +90,49 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Cerca',
-              ),
-              onChanged: search,
+      body: TabBarView(
+        children: [
+          Container(
+            // decoration: BoxDecoration(
+            //   gradient: LinearGradient(
+            //       begin: Alignment.bottomLeft,
+            //       end: Alignment.topRight,
+            //       colors: [Colors.red, Colors.blue],
+            //       stops: [0.2, 1]),
+            // ),
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Cerca',
+                  ),
+                  onChanged: search,
+                ),
+                Expanded(
+                  child: ListView(children: getListChildren()),
+                )
+              ],
             ),
-            Expanded(
-              child: ListView(children: getListChildren()),
-            )
-          ],
-        ),
+          ),
+          Container(),
+        ],
+      ),
+      bottomNavigationBar: TabBar(
+        tabs: [
+          Tab(
+            icon: Icon(Icons.search),
+          ),
+          Tab(
+            icon: Icon(Icons.file_download),
+          ),
+        ],
+        labelColor: Colors.blue,
+        unselectedLabelColor: Colors.blueGrey[100],
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: EdgeInsets.all(5.0),
+        indicatorColor: Colors.orange,
       ),
     );
   }
@@ -113,7 +149,6 @@ class SearchElement extends StatelessWidget {
         child: Column(children: [
       Text(result.snippet.title),
       Text(result.snippet.channelTitle),
-      Text(result.snippet.description),
       Text(result.snippet.publishedAt.toString()),
       // Text(icon.result.snippet.thumbnails.medium),
     ]));
