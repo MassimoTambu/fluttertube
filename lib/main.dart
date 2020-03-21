@@ -38,8 +38,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   yt.SearchListResponse _response;
-
   bool _isLoading = false;
+  String _errorMessage;
 
   void search(String text) async {
     print(text);
@@ -54,10 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           _isLoading = false;
           _response = response;
+          _errorMessage = null;
         });
       } on yt.DetailedApiRequestError catch (e) {
-        e.errors.forEach((error) {
-          print(error.reason);
+        setState(() {
+          _errorMessage = e.message;
+          _isLoading = false;
         });
       }
     }
@@ -66,13 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> getListChildren() {
     if (_isLoading) {
-      return [Container(child: CircularProgressIndicator(), height: double.infinity,),),];
-    } else if (_response != null) {
+      return [Container(child: CircularProgressIndicator(),),];
+    } else if (_response != null && _errorMessage == null) {
       return _response.items.map((item) {
         return SearchElement(item);
       }).toList();
+    } else if (_errorMessage != null) {
+      return [Container(child: Text(_errorMessage))];
     }
-    return [Container()];
+
+    return [Container(child: Text('No items'))];
   }
 
   @override
@@ -90,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 border: OutlineInputBorder(),
                 labelText: 'Cerca',
               ),
-              onChanged: search,
+              onSubmitted: search,
             ),
             Expanded(
               child: ListView(children: getListChildren()),
