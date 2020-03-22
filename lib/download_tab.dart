@@ -1,9 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:youtube_extractor/youtube_extractor.dart';
-
-var extractor = YouTubeExtractor();
-
-void takeVideoStream() async {}
+import 'package:path_provider/path_provider.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class DownloadTab extends StatefulWidget {
   @override
@@ -11,12 +10,22 @@ class DownloadTab extends StatefulWidget {
 }
 
 class _DownloadTabState extends State<DownloadTab> {
-  void onSubmit() async {
-    var streamInfo = await extractor.getMediaStreamsAsync('a1ExYqrBJio');
-    // Print the audio stream url
-    print('Audio URL: ${streamInfo.video.first.url}');
+  void onSubmit(String text) async {
+    var yte = yt.YoutubeExplode();
+    var video = await yte.getVideoMediaStream('uKWcIaJtS6Q');
+    var stream = video.audio[3].downloadStream();
 
-    Text(streamInfo.video.first.url);
+    final dir = await getExternalStorageDirectory();
+    final path = dir.path;
+    File file = File('$path/oof.txt');
+    print(path);
+
+    file.writeAsStringSync('contents');
+    // await for (var value in stream) {
+    //   await file.writeAsBytes(value, mode: FileMode.append);
+    // }
+
+    yte.close();
   }
 
   @override
@@ -30,8 +39,9 @@ class _DownloadTabState extends State<DownloadTab> {
               border: OutlineInputBorder(),
               labelText: 'Url',
             ),
-            // onSubmitted: ,
+            onSubmitted: onSubmit,
           ),
+          Text('')
         ],
       ),
     );

@@ -19,7 +19,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  youtube_extractor: ^1.0.4
+  youtube_explode_dart: ^0.0.16
+  path_provider: ^1.6.5
+  simple_permissions: ^0.1.9
   googleapis_auth: ^0.2.11+1
   googleapis: ^0.54.0
 
