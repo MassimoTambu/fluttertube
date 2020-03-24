@@ -10,22 +10,41 @@ class DownloadTab extends StatefulWidget {
 }
 
 class _DownloadTabState extends State<DownloadTab> {
-  void onSubmit(String text) async {
-    var yte = yt.YoutubeExplode();
-    var video = await yte.getVideoMediaStream('uKWcIaJtS6Q');
-    var stream = video.audio[3].downloadStream();
+  String _error;
 
-    final dir = await getExternalStorageDirectory();
-    final path = dir.path;
-    File file = File('$path/oof.txt');
-    print(path);
+  void onSubmit(String url) async {
+    setState(() {
+      _error = null;
+    });
+    try {
+      var yte = yt.YoutubeExplode();
+      final stream = await fetchVideoAudioFromUrl(yte, url);
+      final dir = await getExternalStorageDirectory();
+      final path = dir.path;
+      print(path);
+      File file = File('$path/oof.ogg');
+      if (await file.exists()) {
+        file.writeAsBytesSync([]);
+      }
 
-    file.writeAsStringSync('contents');
-    // await for (var value in stream) {
-    //   await file.writeAsBytes(value, mode: FileMode.append);
-    // }
+      await for (var value in stream) {
+        await file.writeAsBytes(value, mode: FileMode.append);
+      }
+      yte.close();
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+      });
+    }
+  }
 
-    yte.close();
+  Future<Stream<List<int>>> fetchVideoAudioFromUrl(
+      yt.YoutubeExplode yte, String url) async {
+    var videoId = yt.YoutubeExplode.parseVideoId(url);
+    var video = await yte.getVideoMediaStream(videoId);
+    final audio = video.audio[3].downloadStream();
+
+    return audio;
   }
 
   @override
@@ -41,7 +60,7 @@ class _DownloadTabState extends State<DownloadTab> {
             ),
             onSubmitted: onSubmit,
           ),
-          Text('')
+          if (_error != null) Text(_error)
         ],
       ),
     );
