@@ -11,22 +11,41 @@ class DownloadTab extends StatefulWidget {
 
 class _DownloadTabState extends State<DownloadTab> {
   String _error;
+  bool _audioOnly = false;
+  bool _dowloading = false;
+
+  onChangeSwitch(bool audioOnly) {
+    setState(() {
+      _audioOnly = audioOnly;
+    });
+  }
 
   void onSubmit(String url) async {
     setState(() {
       _error = null;
+      _dowloading = true;
     });
     try {
-      var yte = yt.YoutubeExplode();
-      final stream = await fetchVideoAudioFromUrl(yte, url);
+      final yte = yt.YoutubeExplode();
+      final id = yt.YoutubeExplode.parseVideoId(url);
+      final video = await yte.getVideoMediaStream(id);
       final dir = await getExternalStorageDirectory();
       final path = dir.path;
-      print(path);
-      File file = File('$path/oof.ogg');
+      Stream<List<int>> stream;
+      File file;
+      if (_audioOnly) {
+        stream = video.audio[video.audio.length - 1].downloadStream();
+        file = File('$path/$id.ogg');
+      } else {
+        stream = video.muxed[video.muxed.length - 1].downloadStream();
+        file = File('$path/$id.mp4');
+      }
       if (await file.exists()) {
+        if (!await _confirmOverride(context)) {
+          return;
+        }
         file.writeAsBytesSync([]);
       }
-
       await for (var value in stream) {
         await file.writeAsBytes(value, mode: FileMode.append);
       }
@@ -35,16 +54,31 @@ class _DownloadTabState extends State<DownloadTab> {
       setState(() {
         _error = e.toString();
       });
+    } finally {
+      setState(() {
+        _dowloading = false;
+      });
     }
   }
 
-  Future<Stream<List<int>>> fetchVideoAudioFromUrl(
-      yt.YoutubeExplode yte, String url) async {
-    var videoId = yt.YoutubeExplode.parseVideoId(url);
-    var video = await yte.getVideoMediaStream(videoId);
-    final audio = video.audio[3].downloadStream();
-
-    return audio;
+  Future<bool> _confirmOverride(BuildContext context) {
+    return showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text('Attenzione'),
+              content: Text('Questo file esiste già, vuoi sovrascriverlo?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () => Navigator.of(context).pop(false),
+                ),
+                FlatButton(
+                  child: Text('Sì'),
+                  onPressed: () => Navigator.of(context).pop(true),
+                ),
+              ],
+            ),
+        barrierDismissible: false);
   }
 
   @override
@@ -60,7 +94,21 @@ class _DownloadTabState extends State<DownloadTab> {
             ),
             onSubmitted: onSubmit,
           ),
-          if (_error != null) Text(_error)
+          Row(
+            children: <Widget>[
+              SizedBox(height: 20),
+              Text(
+                'Solo audio',
+                style: const TextStyle(fontSize: 15),
+              ),
+              Switch(
+                value: _audioOnly,
+                onChanged: onChangeSwitch,
+              ),
+            ],
+          ),
+          if (_error != null) Text(_error),
+          if (_dowloading) CircularProgressIndicator()
         ],
       ),
     );
