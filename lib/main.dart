@@ -151,47 +151,31 @@ class SearchElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      // child: Column(children: [
-      //   Text(result.snippet.title),
-      //   Text(result.snippet.channelTitle),
-      //   Text(result.snippet.publishedAt.toString()),
-      //   // Text(icon.result.snippet.thumbnails.medium),
-      // ]),
       child: Row(
         children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: Container(
-              child: Image(
-                height: 50,
-                image: NetworkImage(result.snippet.thumbnails.medium.url),
-              ),
-            ),
+          Image(
+            height: 50,
+            image: NetworkImage(result.snippet.thumbnails.medium.url),
           ),
           Expanded(
-            child: Column(
-              children: <Widget>[
-                Wrap(
-                  children: <Widget>[
-                    Text(
-                      result.snippet.title,
-                      style: TextStyle(fontSize: 11),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Container(
-              child: IconButton(
-                icon: Icon(Icons.android),
-                color: Colors.white,
-                onPressed: () {},
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  result.snippet.title,
+                  style: TextStyle(fontSize: 11),
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
               ),
             ),
-          )
+          ),
+          IconButton(
+            icon: Icon(Icons.file_download),
+            color: Colors.blue,
+            onPressed: () {},
+          ),
         ],
       ),
     );
