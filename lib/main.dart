@@ -42,7 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     final ytClient = yt.YoutubeApi(client);
     try {
-      var response = await ytClient.search.list('snippet', q: text);
+      var response =
+          await ytClient.search.list('snippet', q: text, type: 'video');
 
       setState(() {
         _isLoading = false;
@@ -149,11 +150,50 @@ class SearchElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Column(children: [
-      Text(result.snippet.title),
-      Text(result.snippet.channelTitle),
-      Text(result.snippet.publishedAt.toString()),
-      // Text(icon.result.snippet.thumbnails.medium),
-    ]));
+      height: 50,
+      // child: Column(children: [
+      //   Text(result.snippet.title),
+      //   Text(result.snippet.channelTitle),
+      //   Text(result.snippet.publishedAt.toString()),
+      //   // Text(icon.result.snippet.thumbnails.medium),
+      // ]),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            flex: 1,
+            child: Container(
+              child: Image(
+                height: 50,
+                image: NetworkImage(result.snippet.thumbnails.medium.url),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Wrap(
+                  children: <Widget>[
+                    Text(
+                      result.snippet.title,
+                      style: TextStyle(fontSize: 11),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Container(
+              child: IconButton(
+                icon: Icon(Icons.android),
+                color: Colors.white,
+                onPressed: () {},
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
