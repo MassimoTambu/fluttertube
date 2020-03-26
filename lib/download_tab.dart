@@ -13,6 +13,9 @@ class _DownloadTabState extends State<DownloadTab> {
   String _error;
   bool _audioOnly = false;
   bool _dowloading = false;
+  Stream<List<int>> stream;
+  List<yt.AudioStreamInfo> bitrates;
+  List<yt.MuxedStreamInfo> resolutions;
 
   onChangeSwitch(bool audioOnly) {
     setState(() {
@@ -31,13 +34,14 @@ class _DownloadTabState extends State<DownloadTab> {
       final video = await yte.getVideoMediaStream(id);
       final dir = await getExternalStorageDirectory();
       final path = dir.path;
-      Stream<List<int>> stream;
       File file;
       if (_audioOnly) {
-        stream = video.audio[video.audio.length - 1].downloadStream();
+        // stream = video.audio[video.audio.length - 1].downloadStream();
+        bitrates = video.audio;
         file = File('$path/$id.ogg');
       } else {
-        stream = video.muxed[video.muxed.length - 1].downloadStream();
+        // stream = video.muxed[video.muxed.length - 1].downloadStream();
+        resolutions = video.muxed;
         file = File('$path/$id.mp4');
       }
       if (await file.exists()) {
