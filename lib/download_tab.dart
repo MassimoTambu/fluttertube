@@ -156,19 +156,20 @@ class _DownloadTabState extends State<DownloadTab> {
                 ),
               ),
             ),
-          Row(
-            children: <Widget>[
-              SizedBox(height: 20),
-              Text(
-                'Solo audio',
-                style: const TextStyle(fontSize: 15),
-              ),
-              Switch(
-                value: _audioOnly,
-                onChanged: onChangeSwitch,
-              ),
-            ],
-          ),
+          if (_media != null)
+            Row(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Text(
+                  'Solo audio',
+                  style: const TextStyle(fontSize: 15),
+                ),
+                Switch(
+                  value: _audioOnly,
+                  onChanged: onChangeSwitch,
+                ),
+              ],
+            ),
           if (_audioOnly && _media != null)
             Column(
               children: _media.audio.map((a) {
