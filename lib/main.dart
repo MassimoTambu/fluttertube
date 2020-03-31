@@ -31,10 +31,26 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   yt.SearchListResponse _response;
   bool _isLoading = false;
   String _errorMessage;
+  TabController _tabController;
+  String _mediaId;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: 2);
+    _tabController.addListener(() {
+      if (_tabController.index == 0) {
+        setState(() {
+          _mediaId = null;
+        });
+      }
+    });
+  }
 
   void search(String text) async {
     setState(() {
@@ -59,6 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // takeVideoStream();
   }
 
+  void setMediaId(String mediaId) {
+    setState(() {
+      _mediaId = mediaId;
+    });
+    _tabController.animateTo(1);
+  }
+
   List<Widget> getListChildren() {
     if (_isLoading) {
       return [
@@ -68,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ];
     } else if (_response != null && _errorMessage == null) {
       return _response.items.map((item) {
-        return SearchElement(item);
+        return SearchElement(item, setMediaId);
       }).toList();
     } else if (_errorMessage != null) {
       return [Container(child: Text(_errorMessage))];
@@ -95,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: TabBarView(
+        controller: _tabController,
         children: [
           Container(
             // decoration: BoxDecoration(
@@ -120,10 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          DownloadTab()
+          DownloadTab(mediaId: _mediaId)
         ],
       ),
       bottomNavigationBar: TabBar(
+        controller: _tabController,
         tabs: [
           Tab(
             icon: Icon(Icons.search),
@@ -143,9 +168,14 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SearchElement extends StatelessWidget {
-  SearchElement(this.result);
+  SearchElement(this.result, this.setMediaId);
 
   final yt.SearchResult result;
+  final void Function(String) setMediaId;
+
+  void _fetchStreamInfo(BuildContext context, yt.SearchResult result) {
+    this.setMediaId(result.id.videoId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +204,7 @@ class SearchElement extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.file_download),
             color: Colors.blue,
-            onPressed: () {},
+            onPressed: () => _fetchStreamInfo(context, result),
           ),
         ],
       ),

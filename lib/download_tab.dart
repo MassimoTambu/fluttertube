@@ -5,6 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class DownloadTab extends StatefulWidget {
+  const DownloadTab({this.mediaId});
+  final String mediaId;
+
   @override
   _DownloadTabState createState() => _DownloadTabState();
 }
@@ -18,6 +21,15 @@ class _DownloadTabState extends State<DownloadTab> {
   yt.MediaStreamInfo _selectedStream;
   String id;
   String path;
+
+  @override
+  initState() {
+    super.initState();
+    if (widget.mediaId != null) {
+      _searchUrl = widget.mediaId;
+      onSubmit(_searchUrl);
+    }
+  }
 
   onChangeSwitch(bool audioOnly) {
     setState(() {
@@ -150,7 +162,7 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
           Text(
-            'Bitrate: ${a.bitrate / 1000} kb - Peso: ${a.size / 1000000} MB',
+            'Bitrate: ${a.bitrate / 1000} kb - Peso: ${(a.size / 1000000)} MB',
             style: TextStyle(fontSize: 13),
           ),
         ],
@@ -189,6 +201,7 @@ class _DownloadTabState extends State<DownloadTab> {
                   onChanged: (url) {
                     _searchUrl = url;
                   },
+                  controller: TextEditingController(text: _searchUrl),
                 ),
               ),
               IconButton(
