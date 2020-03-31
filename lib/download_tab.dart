@@ -112,11 +112,71 @@ class _DownloadTabState extends State<DownloadTab> {
     );
   }
 
+  List<Widget> _createMuxedList() {
+    final map = _media.muxed.map<Widget>((v) {
+      return Row(
+        children: <Widget>[
+          Radio(
+            value: v,
+            groupValue: _selectedStream,
+            onChanged: (value) {
+              setState(() {
+                _selectedStream = value;
+              });
+            },
+          ),
+          Text(
+              'Qualità: ${v.videoQualityLabel} - Peso: ${v.size / 1000000} MB'),
+        ],
+      );
+    }).toList();
+
+    map.add(_getDownloadButton());
+
+    return map;
+  }
+
+  List<Widget> _createAudioList() {
+    final map = _media.audio.map<Widget>((a) {
+      return Row(
+        children: <Widget>[
+          Radio(
+            value: a,
+            groupValue: _selectedStream,
+            onChanged: (value) {
+              setState(() {
+                _selectedStream = value;
+              });
+            },
+          ),
+          Text(
+            'Bitrate: ${a.bitrate / 1000} kb - Peso: ${a.size / 1000000} MB',
+            style: TextStyle(fontSize: 13),
+          ),
+        ],
+      );
+    }).toList();
+
+    map.add(_getDownloadButton());
+
+    return map;
+  }
+
+  Widget _getDownloadButton() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: RaisedButton(
+        child: Text('Scarica'),
+        onPressed: () => _download(_selectedStream),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      child: Column(
+      child: ListView(
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -169,55 +229,9 @@ class _DownloadTabState extends State<DownloadTab> {
               ),
             ],
           ),
-          if (_audioOnly && _media != null)
-            Column(
-              children: _media.audio.map((a) {
-                return Row(
-                  children: <Widget>[
-                    Radio(
-                      value: a,
-                      groupValue: _selectedStream,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStream = value;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Bitrate: ${a.bitrate / 1000} kb - Peso: ${a.size / 1000000} MB',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          if (!_audioOnly && _media != null)
-            Column(
-              children: _media.muxed.map((v) {
-                return Row(
-                  children: <Widget>[
-                    Radio(
-                      value: v,
-                      groupValue: _selectedStream,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStream = value;
-                        });
-                      },
-                    ),
-                    Text(
-                        'Qualità: ${v.videoQualityLabel} - Peso: ${v.size / 1000000} MB'),
-                  ],
-                );
-              }).toList(),
-            ),
           if (_media != null)
-            Align(
-              alignment: Alignment.centerRight,
-              child: RaisedButton(
-                child: Text('Scarica'),
-                onPressed: () => _download(_selectedStream),
-              ),
+            Column(
+              children: _audioOnly ? _createAudioList() : _createMuxedList(),
             ),
           if (_dowloading) CircularProgressIndicator()
         ],
