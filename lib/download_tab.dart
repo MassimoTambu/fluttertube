@@ -58,34 +58,34 @@ class _DownloadTabState extends State<DownloadTab> {
     });
   }
 
-  // void _download(yt.StreamInfo download) async {
-  //   setState(() {
-  //     _dowloading = true;
-  //   });
-  //   File file;
-  //   if (_audioOnly) {
-  //     file = File('$path/$id.ogg');
-  //   } else {
-  //     file = File('$path/$id.mp4');
-  //   }
-  //   try {
-  //     if (await file.exists()) {
-  //       if (!await _confirmOverride(context)) {
-  //         return;
-  //       }
-  //       file.writeAsBytesSync([]);
-  //     }
-  //     await for (var value in download.downloadStream()) {
-  //       await file.writeAsBytes(value, mode: FileMode.append);
-  //     }
-  //   } catch (e) {
-  //     _errorDialog(context, 'Errore', e.message);
-  //   } finally {
-  //     setState(() {
-  //       _dowloading = false;
-  //     });
-  //   }
-  // }
+  void _download(yt.StreamInfo download) async {
+    setState(() {
+      _dowloading = true;
+    });
+    File file;
+    if (_audioOnly) {
+      file = File('$path/$id.ogg');
+    } else {
+      file = File('$path/$id.mp4');
+    }
+    // try {
+    //   if (await file.exists()) {
+    //     if (!await _confirmOverride(context)) {
+    //       return;
+    //     }
+    //     file.writeAsBytesSync([]);
+    //   }
+    //   await for (var value in download.downloadStream()) {
+    //     await file.writeAsBytes(value, mode: FileMode.append);
+    //   }
+    // } catch (e) {
+    //   _errorDialog(context, 'Errore', e.message);
+    // } finally {
+    //   setState(() {
+    //     _dowloading = false;
+    //   });
+    // }
+  }
 
   Future<void> _errorDialog(
       BuildContext context, String title, String content) {
@@ -181,8 +181,7 @@ class _DownloadTabState extends State<DownloadTab> {
       alignment: Alignment.centerRight,
       child: RaisedButton(
         child: Text('Scarica'),
-        onPressed: () {},
-        // onPressed: () => _download(_selectedStream),
+        onPressed: () => _download(_selectedStream),
       ),
     );
   }
