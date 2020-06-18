@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertube/download_tab.dart';
 import 'package:fluttertube/google_client.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
-import 'package:simple_permissions/simple_permissions.dart';
 
 void main() => runApp(MyApp());
 
@@ -102,17 +101,6 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    void permissions() async {
-      PermissionStatus permissionResult =
-          await SimplePermissions.requestPermission(
-              Permission.WriteExternalStorage);
-      if (permissionResult == PermissionStatus.authorized) {
-        // code of read or write file in external storage (SD card)
-      }
-    }
-
-    permissions();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
