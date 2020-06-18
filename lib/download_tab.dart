@@ -17,8 +17,9 @@ class _DownloadTabState extends State<DownloadTab> {
   bool _dowloading = false;
   String _searchUrl = '';
   Stream<List<int>> stream;
-  yt.MediaStreamInfoSet _media;
-  yt.MediaStreamInfo _selectedStream;
+  yt.Video _videoInfo;
+  yt.StreamManifest _media;
+  yt.StreamInfo _selectedStream;
   String id;
   String path;
 
@@ -43,8 +44,9 @@ class _DownloadTabState extends State<DownloadTab> {
     });
     try {
       final yte = yt.YoutubeExplode();
-      id = yt.YoutubeExplode.parseVideoId(url);
-      _media = await yte.getVideoMediaStream(id);
+      _videoInfo = await yte.videos.get(url);
+      id = _videoInfo.id.toString();
+      _media = await yte.videos.streamsClient.getManifest(id);
       final dir = await getExternalStorageDirectory();
       path = dir.path;
       yte.close();
@@ -56,7 +58,7 @@ class _DownloadTabState extends State<DownloadTab> {
     });
   }
 
-  void _download(yt.MediaStreamInfo download) async {
+  void _download(yt.StreamInfo download) async {
     setState(() {
       _dowloading = true;
     });
@@ -138,7 +140,7 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
           Text(
-              'Qualità: ${v.videoQualityLabel} - Peso: ${v.size / 1000000} MB'),
+              'Qualità: ${v.videoQualityLabel} - Peso: ${v.size.totalMegaBytes} MB'),
         ],
       );
     }).toList();
@@ -162,7 +164,7 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
           Text(
-            'Bitrate: ${a.bitrate / 1000} kb - Peso: ${(a.size / 1000000)} MB',
+            'Bitrate: ${a.bitrate.kiloBitsPerSecond} kbps - Peso: ${a.size.totalMegaBytes} MB',
             style: TextStyle(fontSize: 13),
           ),
         ],
@@ -217,13 +219,13 @@ class _DownloadTabState extends State<DownloadTab> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      _media.videoDetails.title,
+                      _videoInfo.title,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text('Durata: ' +
                         (new RegExp(r"(.+)\.\d+$"))
-                            .firstMatch(_media.videoDetails.duration.toString())
+                            .firstMatch(_videoInfo.duration.toString())
                             .group(1)),
                   ],
                 ),
