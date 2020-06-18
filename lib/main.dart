@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertube/download_tab.dart';
 import 'package:fluttertube/google_client.dart';
+import 'package:fluttertube/state/app_state.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -167,34 +169,37 @@ class SearchElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          Image(
-            height: 50,
-            image: NetworkImage(result.snippet.thumbnails.medium.url),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  result.snippet.title,
-                  style: TextStyle(fontSize: 11),
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
+    return ChangeNotifierProvider<AppState>(
+      create: (context) => AppState(),
+      child: Container(
+        height: 50,
+        child: Row(
+          children: <Widget>[
+            Image(
+              height: 50,
+              image: NetworkImage(result.snippet.thumbnails.medium.url),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    result.snippet.title,
+                    style: TextStyle(fontSize: 11),
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
                 ),
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.file_download),
-            color: Colors.blue,
-            onPressed: () => _fetchStreamInfo(context, result),
-          ),
-        ],
+            IconButton(
+              icon: Icon(Icons.file_download),
+              color: Colors.blue,
+              onPressed: () => _fetchStreamInfo(context, result),
+            ),
+          ],
+        ),
       ),
     );
   }
