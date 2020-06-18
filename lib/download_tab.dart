@@ -27,8 +27,8 @@ class _DownloadTabState extends State<DownloadTab> {
   initState() {
     super.initState();
     if (widget.mediaId != null) {
-      _searchUrl = widget.mediaId;
-      onSubmit(url: _searchUrl, prefix: 'https://www.youtube.com/watch?v=');
+      _searchUrl = "https://www.youtube.com/watch?v=${widget.mediaId}";
+      onSubmit(_searchUrl);
     }
   }
 
@@ -38,7 +38,7 @@ class _DownloadTabState extends State<DownloadTab> {
     });
   }
 
-  void onSubmit({@required String url, String prefix}) async {
+  void onSubmit(String url) async {
     setState(() {
       _dowloading = true;
     });
@@ -209,7 +209,7 @@ class _DownloadTabState extends State<DownloadTab> {
               ),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => onSubmit(url: _searchUrl),
+                onPressed: () => onSubmit(_searchUrl),
               )
             ],
           ),
