@@ -58,34 +58,34 @@ class _DownloadTabState extends State<DownloadTab> {
     });
   }
 
-  void _download(yt.StreamInfo download) async {
-    setState(() {
-      _dowloading = true;
-    });
-    File file;
-    if (_audioOnly) {
-      file = File('$path/$id.ogg');
-    } else {
-      file = File('$path/$id.mp4');
-    }
-    try {
-      if (await file.exists()) {
-        if (!await _confirmOverride(context)) {
-          return;
-        }
-        file.writeAsBytesSync([]);
-      }
-      await for (var value in download.downloadStream()) {
-        await file.writeAsBytes(value, mode: FileMode.append);
-      }
-    } catch (e) {
-      _errorDialog(context, 'Errore', e.message);
-    } finally {
-      setState(() {
-        _dowloading = false;
-      });
-    }
-  }
+  // void _download(yt.StreamInfo download) async {
+  //   setState(() {
+  //     _dowloading = true;
+  //   });
+  //   File file;
+  //   if (_audioOnly) {
+  //     file = File('$path/$id.ogg');
+  //   } else {
+  //     file = File('$path/$id.mp4');
+  //   }
+  //   try {
+  //     if (await file.exists()) {
+  //       if (!await _confirmOverride(context)) {
+  //         return;
+  //       }
+  //       file.writeAsBytesSync([]);
+  //     }
+  //     await for (var value in download.downloadStream()) {
+  //       await file.writeAsBytes(value, mode: FileMode.append);
+  //     }
+  //   } catch (e) {
+  //     _errorDialog(context, 'Errore', e.message);
+  //   } finally {
+  //     setState(() {
+  //       _dowloading = false;
+  //     });
+  //   }
+  // }
 
   Future<void> _errorDialog(
       BuildContext context, String title, String content) {
@@ -140,7 +140,7 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
           Text(
-              'Qualità: ${v.videoQualityLabel} - Peso: ${v.size.totalMegaBytes} MB'),
+              'Qualità: ${v.videoQualityLabel} - Peso: ${v.size.totalMegaBytes.toStringAsFixed(2)} MB'),
         ],
       );
     }).toList();
@@ -164,7 +164,7 @@ class _DownloadTabState extends State<DownloadTab> {
             },
           ),
           Text(
-            'Bitrate: ${a.bitrate.kiloBitsPerSecond} kbps - Peso: ${a.size.totalMegaBytes} MB',
+            'Bitrate: ${a.bitrate.kiloBitsPerSecond.round()} kbps - Peso: ${a.size.totalMegaBytes.toStringAsFixed(2)} MB',
             style: TextStyle(fontSize: 13),
           ),
         ],
@@ -181,7 +181,8 @@ class _DownloadTabState extends State<DownloadTab> {
       alignment: Alignment.centerRight,
       child: RaisedButton(
         child: Text('Scarica'),
-        onPressed: () => _download(_selectedStream),
+        onPressed: () {},
+        // onPressed: () => _download(_selectedStream),
       ),
     );
   }
