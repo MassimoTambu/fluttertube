@@ -5,6 +5,7 @@ import 'package:fluttertube/state/app_state.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadTab extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _DownloadTabState extends State<DownloadTab>
   Stream<List<int>> stream;
   yt.Video _videoInfo;
   yt.StreamInfo _selectedStream;
+  String mediaId;
   String id;
   String path;
 
@@ -29,17 +31,19 @@ class _DownloadTabState extends State<DownloadTab>
   didChangeDependencies() {
     super.didChangeDependencies();
 
-    final mediaId = Provider.of<AppState>(context).mediaId;
-
-    if (mediaId != null) {
-      _searchUrl = "https://www.youtube.com/watch?v=$mediaId";
-      onSubmit(_searchUrl);
+    if (Provider.of<AppState>(context).mediaId != mediaId) {
+      mediaId = Provider.of<AppState>(context).mediaId;
+      if (mediaId != null) {
+        _searchUrl = "https://www.youtube.com/watch?v=$mediaId";
+        onSubmit(_searchUrl);
+      }
     }
   }
 
   onChangeSwitch(bool audioOnly) {
     setState(() {
       _audioOnly = audioOnly;
+      _selectedStream = null;
     });
   }
 
@@ -74,23 +78,36 @@ class _DownloadTabState extends State<DownloadTab>
     } else {
       file = File('$path/$id.mp4');
     }
-    // try {
-    //   if (await file.exists()) {
-    //     if (!await _confirmOverride(context)) {
-    //       return;
-    //     }
-    //     file.writeAsBytesSync([]);
-    //   }
-    //   await for (var value in download.downloadStream()) {
-    //     await file.writeAsBytes(value, mode: FileMode.append);
-    //   }
-    // } catch (e) {
-    //   _errorDialog(context, 'Errore', e.message);
-    // } finally {
-    //   setState(() {
-    //     _dowloading = false;
-    //   });
-    // }
+    try {
+      if (await file.exists()) {
+        if (!await _confirmOverride(context)) {
+          return;
+        }
+        file.writeAsBytesSync([]);
+      }
+
+      final yte = yt.YoutubeExplode();
+
+      final stream = yte.videos.streamsClient.get(download);
+
+      // Open a file for writing.
+      var fileStream = file.openWrite();
+
+      // Pipe all the content of the stream into the file.
+      await stream.pipe(fileStream);
+
+      // Close the file.
+      await fileStream.flush();
+      await fileStream.close();
+
+      yte.close();
+    } catch (e) {
+      _errorDialog(context, 'Errore', e.message);
+    } finally {
+      setState(() {
+        _dowloading = false;
+      });
+    }
   }
 
   Future<void> _errorDialog(
@@ -136,13 +153,15 @@ class _DownloadTabState extends State<DownloadTab>
     final map = Provider.of<AppState>(context, listen: false)
         .media
         .muxed
+        .sortByVideoQuality()
+        .reversed
         .map<Widget>((v) {
       return Row(
         children: <Widget>[
           Radio(
             value: v,
             groupValue: _selectedStream,
-            onChanged: (value) {
+            onChanged: (StreamInfo value) {
               setState(() {
                 _selectedStream = value;
               });
@@ -163,6 +182,8 @@ class _DownloadTabState extends State<DownloadTab>
     final map = Provider.of<AppState>(context, listen: false)
         .media
         .audio
+        .sortByBitrate()
+        .reversed
         .map<Widget>((a) {
       return Row(
         children: <Widget>[
@@ -192,19 +213,29 @@ class _DownloadTabState extends State<DownloadTab>
     return Align(
       alignment: Alignment.centerRight,
       child: RaisedButton(
-        child: Text('Scarica'),
-        onPressed: () => _download(_selectedStream),
+        color: Theme.of(context).primaryColor,
+        child: Text(
+          'Scarica',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        onPressed:
+            _selectedStream == null ? null : () => _download(_selectedStream),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Consumer<AppState>(
       builder: (context, appState, child) {
         return Container(
           padding: const EdgeInsets.all(12),
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -264,7 +295,11 @@ class _DownloadTabState extends State<DownloadTab>
                   children:
                       _audioOnly ? _createAudioList() : _createMuxedList(),
                 ),
-              if (_dowloading) CircularProgressIndicator()
+              if (_dowloading)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Center(child: CircularProgressIndicator()),
+                )
             ],
           ),
         );

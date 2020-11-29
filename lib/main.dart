@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage>
     });
     final ytClient = yt.YoutubeApi(client);
     try {
-      var response =
-          await ytClient.search.list('snippet', q: text, type: 'video');
+      var response = await ytClient.search
+          .list('snippet', q: text, type: 'video', maxResults: 10);
 
       setState(() {
         _isLoading = false;

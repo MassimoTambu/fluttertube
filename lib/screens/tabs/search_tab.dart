@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchTab extends StatelessWidget {
   final bool isLoading;
@@ -48,30 +49,64 @@ class SearchTab extends StatelessWidget {
         ),
       );
     } else if (response != null) {
-      child = Expanded(
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: response.items.length,
-          itemBuilder: (context, index) {
-            return getListChildren(index);
-          },
-        ),
-      );
+      // CHECK IF IS EMPTY RESULT
+      if (response.items.length == 0) {
+        child = Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "🤷🏽‍♀️",
+                style: const TextStyle(fontSize: 40),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Nessun risultato',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        child = Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemCount: response.items.length,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Questi sono i primi 10 risultati trovati:"),
+                    const SizedBox(height: 10),
+                    getListChildren(index),
+                  ],
+                );
+              }
+              return getListChildren(index);
+            },
+          ),
+        );
+      }
     } else if (response == null) {
       child = Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.music_video,
-              size: 80,
-              color: Theme.of(context).accentColor,
+            const Text(
+              "🕵🏽‍♂️",
+              style: const TextStyle(fontSize: 40),
             ),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Nessuna ricerca effettuata',
-              style: TextStyle(
+              style: const TextStyle(
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor,
               ),
             ),
           ],
@@ -112,31 +147,69 @@ class SearchElement extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 5),
       child: Row(
         children: <Widget>[
-          Image(
-            height: 50,
-            image: NetworkImage(result.snippet.thumbnails.medium.url),
-          ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  result.snippet.title,
-                  style: TextStyle(fontSize: 11),
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
+            child: Tooltip(
+              message: "Guarda su Youtube App",
+              child: InkWell(
+                onTap: () => onOpenYoutubeApp(context, result.id.videoId),
+                child: Row(
+                  children: [
+                    Image(
+                      height: 50,
+                      image: NetworkImage(result.snippet.thumbnails.medium.url),
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            result.snippet.title,
+                            style: TextStyle(fontSize: 11),
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.file_download),
-            color: Theme.of(context).accentColor,
-            onPressed: () => _fetchStreamInfo(context, result),
+          Tooltip(
+            message: "Scarica",
+            child: IconButton(
+              icon: Icon(
+                Icons.file_download,
+              ),
+              color: Theme.of(context).accentColor,
+              onPressed: () => _fetchStreamInfo(context, result),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  void onOpenYoutubeApp(BuildContext context, String videoId) async {
+    final url = 'https://www.youtube.com/watch?v=$videoId';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
