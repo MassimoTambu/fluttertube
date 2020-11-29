@@ -6,6 +6,7 @@ import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/utils.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,11 +46,24 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
-    super.initState();
     _tabController = new TabController(vsync: this, length: 2);
     _tabController.addListener(() {
       if (_tabController.index == 0) {
         Provider.of<AppState>(context, listen: false).mediaId = null;
+      }
+    });
+
+    getPermission();
+
+    super.initState();
+  }
+
+  void getPermission() async {
+    final permissions = [Permission.storage];
+    permissions.forEach((p) async {
+      final isGranted = await p.isGranted;
+      if (!isGranted) {
+        await p.request();
       }
     });
   }
@@ -74,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage>
         _isLoading = false;
       });
     }
-    // takeVideoStream();
   }
 
   void setMediaId(String mediaId) {

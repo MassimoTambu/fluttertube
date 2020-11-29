@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,16 +22,13 @@ class _DownloadTabState extends State<DownloadTab>
   yt.Video _videoInfo;
   yt.StreamInfo _selectedStream;
   String mediaId;
-  String id;
-  String path;
+  String title;
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   didChangeDependencies() {
-    super.didChangeDependencies();
-
     if (Provider.of<AppState>(context).mediaId != mediaId) {
       mediaId = Provider.of<AppState>(context).mediaId;
       if (mediaId != null) {
@@ -38,6 +36,8 @@ class _DownloadTabState extends State<DownloadTab>
         onSubmit(_searchUrl);
       }
     }
+
+    super.didChangeDependencies();
   }
 
   onChangeSwitch(bool audioOnly) {
@@ -54,14 +54,15 @@ class _DownloadTabState extends State<DownloadTab>
     try {
       final yte = yt.YoutubeExplode();
       _videoInfo = await yte.videos.get(url);
-      id = _videoInfo.id.toString();
+      final id = _videoInfo.id.toString();
+      title = _videoInfo.title;
+
       Provider.of<AppState>(context, listen: false).media =
           await yte.videos.streamsClient.getManifest(id);
-      final dir = await getExternalStorageDirectory();
-      path = dir.path;
+
       yte.close();
     } catch (e) {
-      _errorDialog(context, 'Errore', e.message);
+      _errorDialog(context, 'Errore', e.toString());
     }
     setState(() {
       _dowloading = false;
@@ -72,11 +73,24 @@ class _DownloadTabState extends State<DownloadTab>
     setState(() {
       _dowloading = true;
     });
+
     File file;
-    if (_audioOnly) {
-      file = File('$path/$id.ogg');
+    String path;
+
+    if (Platform.isAndroid) {
+      path = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS,
+      );
+    } else if (Platform.isIOS) {
+      path = (await getApplicationDocumentsDirectory()).path;
     } else {
-      file = File('$path/$id.mp4');
+      throw 'Not Implemented directory';
+    }
+
+    if (_audioOnly) {
+      file = File('$path/$title.ogg');
+    } else {
+      file = File('$path/$title.mp4');
     }
     try {
       if (await file.exists()) {
