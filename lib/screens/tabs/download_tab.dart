@@ -11,16 +11,19 @@ class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();
 }
 
-class _DownloadTabState extends State<DownloadTab> {
+class _DownloadTabState extends State<DownloadTab>
+    with AutomaticKeepAliveClientMixin {
   bool _audioOnly = false;
   bool _dowloading = false;
   String _searchUrl = '';
   Stream<List<int>> stream;
   yt.Video _videoInfo;
-  yt.StreamManifest _media;
   yt.StreamInfo _selectedStream;
   String id;
   String path;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   didChangeDependencies() {
@@ -48,7 +51,8 @@ class _DownloadTabState extends State<DownloadTab> {
       final yte = yt.YoutubeExplode();
       _videoInfo = await yte.videos.get(url);
       id = _videoInfo.id.toString();
-      _media = await yte.videos.streamsClient.getManifest(id);
+      Provider.of<AppState>(context, listen: false).media =
+          await yte.videos.streamsClient.getManifest(id);
       final dir = await getExternalStorageDirectory();
       path = dir.path;
       yte.close();
@@ -129,7 +133,10 @@ class _DownloadTabState extends State<DownloadTab> {
   }
 
   List<Widget> _createMuxedList() {
-    final map = _media.muxed.map<Widget>((v) {
+    final map = Provider.of<AppState>(context, listen: false)
+        .media
+        .muxed
+        .map<Widget>((v) {
       return Row(
         children: <Widget>[
           Radio(
@@ -153,7 +160,10 @@ class _DownloadTabState extends State<DownloadTab> {
   }
 
   List<Widget> _createAudioList() {
-    final map = _media.audio.map<Widget>((a) {
+    final map = Provider.of<AppState>(context, listen: false)
+        .media
+        .audio
+        .map<Widget>((a) {
       return Row(
         children: <Widget>[
           Radio(
@@ -191,7 +201,7 @@ class _DownloadTabState extends State<DownloadTab> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
-      builder: (context, value, child) {
+      builder: (context, appState, child) {
         return Container(
           padding: const EdgeInsets.all(12),
           child: ListView(
@@ -216,7 +226,7 @@ class _DownloadTabState extends State<DownloadTab> {
                   )
                 ],
               ),
-              if (_media != null)
+              if (appState.media != null)
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
@@ -235,7 +245,7 @@ class _DownloadTabState extends State<DownloadTab> {
                     ),
                   ),
                 ),
-              if (_media != null)
+              if (appState.media != null)
                 Row(
                   children: <Widget>[
                     SizedBox(height: 20),
@@ -249,7 +259,7 @@ class _DownloadTabState extends State<DownloadTab> {
                     ),
                   ],
                 ),
-              if (_media != null)
+              if (appState.media != null)
                 Column(
                   children:
                       _audioOnly ? _createAudioList() : _createMuxedList(),
