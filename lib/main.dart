@@ -4,6 +4,7 @@ import 'package:fluttertube/google_client.dart';
 import 'package:fluttertube/screens/tabs/search_tab.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/utils.dart';
+import 'package:fluttertube/screens/info.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -100,6 +101,12 @@ class _MyHomePageState extends State<MyHomePage>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info),
+            onPressed: () => onInfoClick(context),
+          ),
+        ],
       ),
       body: TabBarView(
         controller: _tabController,
@@ -130,6 +137,14 @@ class _MyHomePageState extends State<MyHomePage>
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorPadding: EdgeInsets.all(5.0),
         indicatorColor: Theme.of(context).accentColor,
+      ),
+    );
+  }
+
+  void onInfoClick(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => InfoPage(),
       ),
     );
   }
