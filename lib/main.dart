@@ -11,7 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -19,7 +21,9 @@ class MyApp extends StatelessWidget {
         home: DefaultTabController(
           length: 2,
           child: MyHomePage(title: 'Flutter Demo Home Page'),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -38,7 +42,6 @@ class _MyHomePageState extends State<MyHomePage>
   bool _isLoading = false;
   String _errorMessage;
   TabController _tabController;
-  String _mediaId;
 
   @override
   void initState() {
@@ -46,9 +49,7 @@ class _MyHomePageState extends State<MyHomePage>
     _tabController = new TabController(vsync: this, length: 2);
     _tabController.addListener(() {
       if (_tabController.index == 0) {
-        setState(() {
-          _mediaId = null;
-        });
+        Provider.of<AppState>(context, listen: false).mediaId = null;
       }
     });
   }
@@ -77,9 +78,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void setMediaId(String mediaId) {
-    setState(() {
-      _mediaId = mediaId;
-    });
+    Provider.of<AppState>(context, listen: false).mediaId = mediaId;
     _tabController.animateTo(1);
   }
 
@@ -134,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage>
               ],
             ),
           ),
-          DownloadTab(mediaId: _mediaId)
+          DownloadTab(),
         ],
       ),
       bottomNavigationBar: TabBar(

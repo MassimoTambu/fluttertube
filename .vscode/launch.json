@@ -5,9 +5,43 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter",
+            "name": "OnePlus 5",
+            "type": "dart",
             "request": "launch",
-            "type": "dart"
-        }
-    ]
+            "program": "lib/main.dart",
+            "deviceId": "ONEPLUS A5000"
+        },
+        {
+            "name": "Huawuei",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "deviceId": "JSN L21"
+        },
+        {
+            "name": "Samsung Babbo",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "deviceId": "SM G935F"
+        },
+        {
+            "name": "Chrome",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "deviceId": "Web-Server"
+        },
+    ],
+    "compounds": [
+		{
+            "name": "All Devices",
+            "configurations": [
+                "OnePlus 5",
+                // "Huawuei",
+                // "Samsung Babbo",
+                "Chrome"
+            ],
+		}
+	]
 }

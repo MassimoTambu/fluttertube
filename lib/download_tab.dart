@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertube/state/app_state.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class DownloadTab extends StatefulWidget {
-  const DownloadTab({this.mediaId});
-  final String mediaId;
-
   @override
   _DownloadTabState createState() => _DownloadTabState();
 }
@@ -24,10 +23,13 @@ class _DownloadTabState extends State<DownloadTab> {
   String path;
 
   @override
-  initState() {
-    super.initState();
-    if (widget.mediaId != null) {
-      _searchUrl = "https://www.youtube.com/watch?v=${widget.mediaId}";
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final mediaId = Provider.of<AppState>(context).mediaId;
+
+    if (mediaId != null) {
+      _searchUrl = "https://www.youtube.com/watch?v=$mediaId";
       onSubmit(_searchUrl);
     }
   }
@@ -188,70 +190,75 @@ class _DownloadTabState extends State<DownloadTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: ListView(
-        children: <Widget>[
-          Row(
+    return Consumer<AppState>(
+      builder: (context, value, child) {
+        return Container(
+          padding: const EdgeInsets.all(12),
+          child: ListView(
             children: <Widget>[
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Url',
-                  ),
-                  onChanged: (url) {
-                    _searchUrl = url;
-                  },
-                  controller: TextEditingController(text: _searchUrl),
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => onSubmit(_searchUrl),
-              )
-            ],
-          ),
-          if (_media != null)
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      _videoInfo.title,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Url',
+                      ),
+                      onChanged: (url) {
+                        _searchUrl = url;
+                      },
+                      controller: TextEditingController(text: _searchUrl),
                     ),
-                    Text('Durata: ' +
-                        (new RegExp(r"(.+)\.\d+$"))
-                            .firstMatch(_videoInfo.duration.toString())
-                            .group(1)),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () => onSubmit(_searchUrl),
+                  )
+                ],
+              ),
+              if (_media != null)
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          _videoInfo.title,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text('Durata: ' +
+                            (new RegExp(r"(.+)\.\d+$"))
+                                .firstMatch(_videoInfo.duration.toString())
+                                .group(1)),
+                      ],
+                    ),
+                  ),
+                ),
+              if (_media != null)
+                Row(
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    Text(
+                      'Solo audio',
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                    Switch(
+                      value: _audioOnly,
+                      onChanged: onChangeSwitch,
+                    ),
                   ],
                 ),
-              ),
-            ),
-          if (_media != null)
-            Row(
-              children: <Widget>[
-                SizedBox(height: 20),
-                Text(
-                  'Solo audio',
-                  style: const TextStyle(fontSize: 15),
+              if (_media != null)
+                Column(
+                  children:
+                      _audioOnly ? _createAudioList() : _createMuxedList(),
                 ),
-                Switch(
-                  value: _audioOnly,
-                  onChanged: onChangeSwitch,
-                ),
-              ],
-            ),
-          if (_media != null)
-            Column(
-              children: _audioOnly ? _createAudioList() : _createMuxedList(),
-            ),
-          if (_dowloading) CircularProgressIndicator()
-        ],
-      ),
+              if (_dowloading) CircularProgressIndicator()
+            ],
+          ),
+        );
+      },
     );
   }
 }

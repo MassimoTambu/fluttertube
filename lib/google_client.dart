@@ -1,3 +1,3 @@
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
-final client = auth.clientViaApiKey('AIzaSyB0E8qFfLrQ8O3FK3j1RNG8YAfLW0A3oSE');
+final client = auth.clientViaApiKey('AIzaSyC6emRZoJblgvcFOIppE0G7R6ZloTVaf2Q');

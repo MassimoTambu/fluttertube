@@ -5,7 +5,7 @@ class AppState with ChangeNotifier {
 
   String get mediaId => _mediaId;
 
-  setMediaId(String mediaId) {
+  set mediaId(String mediaId) {
     _mediaId = mediaId;
     notifyListeners();
   }
