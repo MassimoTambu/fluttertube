@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/widgets/custom_scaffold.dart';
 
 class InfoPage extends StatelessWidget {
   final appVersion = "1.0.0";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text("Info App"),
         centerTitle: true,
       ),
-      body: Container(
+      child: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -34,24 +35,11 @@ class InfoPage extends StatelessWidget {
           children: [
             TextSpan(text: "Questa semplice App è stata creata da "),
             TextSpan(
-              text: "Massimo Tamburini",
+              text: "Snorf",
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            TextSpan(text: " e "),
-            TextSpan(
-              text: "Lorenzo Polverelli",
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: "."),
-            TextSpan(
-              text:
-                  "Se c'è qualcosa che non funziona o pensate siano necessarie delle migliorie segnalatelo ad uno dei due programmatori di fiducia sopra citati.",
             ),
           ],
         ),

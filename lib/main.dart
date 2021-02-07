@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/screens/settings/settings.dart';
 import 'package:fluttertube/screens/tabs/download_tab.dart';
 import 'package:fluttertube/google_client.dart';
 import 'package:fluttertube/screens/tabs/search_tab.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/utils.dart';
-import 'package:fluttertube/screens/info.dart';
+import 'package:fluttertube/widgets/custom_scaffold.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -98,17 +99,17 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
           IconButton(
-            icon: const Icon(Icons.info),
+            icon: const Icon(Icons.settings),
             onPressed: () => onInfoClick(context),
           ),
         ],
       ),
-      body: TabBarView(
+      child: TabBarView(
         controller: _tabController,
         physics: const BouncingScrollPhysics(),
         children: [
@@ -122,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage>
           DownloadTab(),
         ],
       ),
-      bottomNavigationBar: TabBar(
+      navBar: TabBar(
         controller: _tabController,
         tabs: [
           Tab(
@@ -144,7 +145,10 @@ class _MyHomePageState extends State<MyHomePage>
   void onInfoClick(BuildContext context) {
     Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => InfoPage(),
+        builder: (BuildContext context) => CustomScaffold(
+          appBar: AppBar(),
+          child: SettingsPage(),
+        ),
       ),
     );
   }

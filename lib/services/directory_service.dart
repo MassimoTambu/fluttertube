@@ -1,0 +1,3 @@
+class DirectoryService {
+  String downloadDirectory;
+}
