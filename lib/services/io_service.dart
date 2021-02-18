@@ -77,4 +77,11 @@ class LocalStorageService {
 
     return prefs.remove(key);
   }
+
+  /// Verifica se esiste [key]
+  static Future<bool> containsKey(String key) async {
+    final prefs = await _prefs;
+
+    return prefs.containsKey(key);
+  }
 }
