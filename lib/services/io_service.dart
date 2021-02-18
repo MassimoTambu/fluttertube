@@ -1,27 +1,80 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class IOService {
-  // Create storage
-  static final _storage = new FlutterSecureStorage();
+class LocalStorageService {
+  static final _prefs = SharedPreferences.getInstance();
 
-  // Read all values
-  static Future<Map<String, String>> readAll() async {
-    return await _storage.readAll();
+  /// Ritorna [Set] di [String] tutte le keys presenti
+  static Future<Set<String>> getAll() async {
+    final prefs = await _prefs;
+
+    return prefs.getKeys();
   }
 
-  static Future<String> readValue(String key) async {
-    return await _storage.read(key: key);
+  /// Ottiene il valore registrato in [key]
+  static Future<T> getValue<T>(String key) async {
+    final prefs = await _prefs;
+
+    switch (T) {
+      case bool:
+        return prefs.getBool(key) as T;
+        break;
+      case double:
+        return prefs.getDouble(key) as T;
+        break;
+      case int:
+        return prefs.getInt(key) as T;
+        break;
+      case String:
+        return prefs.getString(key) as T;
+        break;
+      case List:
+        if (T as List<String> != null)
+          return prefs.getStringList(key) as T;
+        else
+          throw 'List Type not managed.';
+        break;
+      default:
+        throw 'Type not managed.';
+    }
   }
 
-  static void write(String key, String value) async {
-    await _storage.write(key: key, value: value);
+  /// Imposta [value] in [key]. Se [value] viene chiamato [deleteValue()] sulla [key].
+  /// Ritorna [bool] che indica l'esito.
+  static Future<bool> setValue<T>(String key, T value) async {
+    if (value == null) {
+      return deleteValue(key);
+    }
+
+    final prefs = await _prefs;
+
+    switch (T) {
+      case bool:
+        return prefs.setBool(key, value as bool);
+        break;
+      case double:
+        return prefs.setDouble(key, value as double);
+        break;
+      case int:
+        return prefs.setInt(key, value as int);
+        break;
+      case String:
+        return prefs.setString(key, value as String);
+        break;
+      case List:
+        if (T as List<String> != null)
+          return prefs.setStringList(key, value as List<String>);
+        else
+          throw 'List Type not managed.';
+        break;
+      default:
+        throw 'Type not managed.';
+    }
   }
 
-  static void deleteAll() async {
-    await _storage.deleteAll();
-  }
+  /// Cancella la entry [key][value] dato [key]
+  static Future<bool> deleteValue(String key) async {
+    final prefs = await _prefs;
 
-  static void deleteValue(String key) async {
-    await _storage.delete(key: key);
+    return prefs.remove(key);
   }
 }

@@ -1,4 +1,4 @@
-enum DataKeys {
+enum DataKeyTypes {
   DownloadDir,
   AudioExtension,
   VideoExtension,

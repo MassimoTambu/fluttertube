@@ -1,4 +1,4 @@
-import 'package:fluttertube/utils/data_keys_enum.dart';
+import 'package:fluttertube/models/enums/data_key_types.dart';
 
 class MemoryDataService {
   static Map<String, String> _data = {};
@@ -7,7 +7,7 @@ class MemoryDataService {
     _data = data;
   }
 
-  static String getData(DataKeys dataKey) {
+  static String getData(DataKeyTypes dataKey) {
     return _data[dataKey];
   }
 }
