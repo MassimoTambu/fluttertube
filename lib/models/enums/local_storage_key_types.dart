@@ -1,10 +1,10 @@
-enum DataKeyTypes {
+enum LocalStorageKeyTypes {
   DownloadDir,
   AudioExtension,
   VideoExtension,
 }
 
-extension ParseToString on DataKeyTypes {
+extension ParseToString on LocalStorageKeyTypes {
   String toShortString() {
     return this.toString().split('.').last;
   }
