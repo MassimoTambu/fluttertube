@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
-        title: 'Flutter Youtube Downloader',
+        title: 'We We Uagliò',
         theme: buildThemeData(),
         home: DefaultTabController(
           length: 2,
-          child: MyHomePage(title: 'Youtube Downloader 👨🏽‍💻'),
+          child: MyHomePage(title: 'We We Uagliò ⌚'),
         ),
       ),
     );

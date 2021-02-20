@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/utils/helpers/app_version_helper.dart';
 import 'package:fluttertube/widgets/custom_scaffold.dart';
 
 class InfoPage extends StatelessWidget {
-  final appVersion = "1.0.0";
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -41,6 +40,15 @@ class InfoPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            TextSpan(text: ". Seguitemi su "),
+            TextSpan(
+              text: "Only Fanz ",
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(text: "per supportarmi! 💖"),
           ],
         ),
       ),
@@ -48,6 +56,6 @@ class InfoPage extends StatelessWidget {
   }
 
   Widget buildInfoVersion(BuildContext context) {
-    return Text("Versione App: $appVersion");
+    return Text("Versione App: ${AppVersionHelper.version}");
   }
 }
