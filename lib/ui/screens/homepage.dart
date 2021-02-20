@@ -4,7 +4,7 @@ import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/ui/screens/settings/main_settings.dart';
 import 'package:fluttertube/ui/screens/tabs/download_tab.dart';
 import 'package:fluttertube/ui/screens/tabs/search_tab.dart';
-import 'package:fluttertube/ui/widgets/custom_scaffold.dart';
+import 'package:fluttertube/ui/widgets/ft_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';

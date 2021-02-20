@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertube/ui/widgets/custom_scaffold.dart';
+import 'package:fluttertube/ui/widgets/ft_scaffold.dart';
 import 'package:fluttertube/utils/helpers/app_version_helper.dart';
 
 class InfoPage extends StatelessWidget {
