@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/ui/widgets/custom_scaffold.dart';
 import 'package:fluttertube/utils/helpers/app_version_helper.dart';
-import 'package:fluttertube/widgets/custom_scaffold.dart';
 
 class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: AppBar(
-        title: Text("Info App"),
-        centerTitle: true,
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            buildInfoDesc(context),
-            buildInfoVersion(context),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          buildInfoDesc(context),
+          buildInfoVersion(context),
+        ],
       ),
     );
   }

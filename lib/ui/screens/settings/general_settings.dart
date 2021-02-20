@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomizeSettingsPage extends StatelessWidget {
+class GeneralSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();

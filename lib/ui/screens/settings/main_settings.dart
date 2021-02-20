@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertube/screens/settings/customize_settings.dart';
-import 'package:fluttertube/screens/settings/info.dart';
-import 'package:fluttertube/widgets/custom_scaffold.dart';
+import 'package:fluttertube/ui/screens/settings/general_settings.dart';
+import 'package:fluttertube/ui/screens/settings/info.dart';
+import 'package:fluttertube/ui/widgets/custom_scaffold.dart';
 
-class SettingsPage extends StatelessWidget {
+class MainSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,9 +25,9 @@ class SettingsPage extends StatelessWidget {
   void _navigateToCustomizeSettingsPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CustomScaffold(
+        builder: (context) => FTScaffold(
           appBar: AppBar(),
-          child: CustomizeSettingsPage(),
+          child: GeneralSettingsPage(),
         ),
       ),
     );
@@ -36,8 +36,11 @@ class SettingsPage extends StatelessWidget {
   void _navigateToInfoPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CustomScaffold(
-          appBar: AppBar(),
+        builder: (context) => FTScaffold(
+          appBar: AppBar(
+            title: Text("Info App"),
+            centerTitle: true,
+          ),
           child: InfoPage(),
         ),
       ),
