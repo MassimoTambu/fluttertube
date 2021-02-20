@@ -5,6 +5,7 @@ import 'package:fluttertube/ui/screens/settings/main_settings.dart';
 import 'package:fluttertube/ui/screens/tabs/download_tab.dart';
 import 'package:fluttertube/ui/screens/tabs/search_tab.dart';
 import 'package:fluttertube/ui/widgets/ft_scaffold.dart';
+import 'package:fluttertube/utils/services/permission_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
@@ -31,19 +32,9 @@ class _HomePageScreenState extends State<HomePageScreen>
       }
     });
 
-    getPermission();
+    PermissionService.getRequiredPermissions();
 
     super.initState();
-  }
-
-  void getPermission() async {
-    final permissions = [Permission.storage];
-    permissions.forEach((p) async {
-      final isGranted = await p.isGranted;
-      if (!isGranted) {
-        await p.request();
-      }
-    });
   }
 
   void search(String text) async {

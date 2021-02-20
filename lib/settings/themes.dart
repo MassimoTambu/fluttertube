@@ -8,7 +8,7 @@ class FTThemes {
       primarySwatch: createMaterialColor(
         const Color.fromARGB(255, 196, 48, 43),
       ),
-      accentColor: Colors.green,
+      accentColor: Color.fromARGB(255, 57, 73, 171),
       unselectedWidgetColor: Colors.blueGrey[100],
     );
   }
