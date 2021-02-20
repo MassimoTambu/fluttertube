@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FTThemes {
   static ThemeData buildThemeData() {
     return ThemeData(
+      textTheme: GoogleFonts.sourceSansProTextTheme(),
       primarySwatch: createMaterialColor(
         const Color.fromARGB(255, 196, 48, 43),
       ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertube/google_client.dart';
+import 'package:fluttertube/settings/google_client.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/ui/screens/settings/main_settings.dart';
 import 'package:fluttertube/ui/screens/tabs/download_tab.dart';
 import 'package:fluttertube/ui/screens/tabs/search_tab.dart';
 import 'package:fluttertube/ui/widgets/custom_scaffold.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -78,7 +79,10 @@ class _HomePageScreenState extends State<HomePageScreen>
       length: 2,
       child: FTScaffold(
         appBar: AppBar(
-          title: Text('We We Uagliò ⌚'),
+          title: Text(
+            'We We Uagli0\' ⌚',
+            style: GoogleFonts.nanumPenScript(fontSize: 24),
+          ),
           centerTitle: true,
           actions: [
             IconButton(
