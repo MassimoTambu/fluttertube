@@ -3,6 +3,7 @@ import 'package:fluttertube/models/classes/ft_downloader.dart';
 import 'package:fluttertube/models/enums/file_format_types.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/utils/helpers/dialogs_helper.dart';
+import 'package:fluttertube/utils/helpers/snackbar_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
@@ -82,7 +83,10 @@ class _DownloadTabState extends State<DownloadTab>
       streamToDownload: selectedStream,
       context: context,
       onInitDownload: () => setState(() => _dowloading = true),
-      onEndDownload: () => setState(() => _dowloading = false),
+      onEndDownload: () {
+        setState(() => _dowloading = false);
+        SnackBarHelper.showSnackBar(context, message: 'Download Completato!');
+      },
     );
   }
 
