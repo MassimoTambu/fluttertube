@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertube/models/classes/ft_downloader.dart';
-import 'package:fluttertube/models/enums/file_format_type.dart';
+import 'package:fluttertube/models/enums/file_format_types.dart';
 import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/utils/helpers/dialogs_helper.dart';
 import 'package:provider/provider.dart';

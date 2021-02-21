@@ -1,4 +1,5 @@
 enum LocalStorageKeyTypes {
+  FirstRun,
   DownloadDir,
   AudioFormat,
   VideoFormat,

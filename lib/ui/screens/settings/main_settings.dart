@@ -10,7 +10,7 @@ class MainSettingsScreen extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            title: Text("Modifica le impostazioni"),
+            title: Text("Impostazioni generali"),
             onTap: () => _navigateToCustomizeSettingsPage(context),
           ),
           ListTile(
@@ -26,7 +26,10 @@ class MainSettingsScreen extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FTScaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text('Impostazioni generali'),
+            centerTitle: true,
+          ),
           child: GeneralSettingsScreen(),
         ),
       ),
@@ -38,7 +41,7 @@ class MainSettingsScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => FTScaffold(
           appBar: AppBar(
-            title: Text("Info App"),
+            title: Text('Info App'),
             centerTitle: true,
           ),
           child: InfoScreen(),

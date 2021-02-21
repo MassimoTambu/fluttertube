@@ -39,7 +39,7 @@ class LocalStorageService {
   }
 
   /// Imposta [value] in [key]. Se [value] viene chiamato [deleteValue()] sulla [key].
-  /// Ritorna [bool] che indica l'esito.
+  /// Ritorna [bool] indicante l'esito.
   static Future<bool> setValue<T>(String key, T value) async {
     if (value == null) {
       return deleteValue(key);

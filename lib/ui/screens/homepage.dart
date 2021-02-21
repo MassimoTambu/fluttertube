@@ -6,6 +6,7 @@ import 'package:fluttertube/ui/screens/tabs/download_tab.dart';
 import 'package:fluttertube/ui/screens/tabs/search_tab.dart';
 import 'package:fluttertube/ui/widgets/ft_scaffold.dart';
 import 'package:fluttertube/utils/services/permission_service.dart';
+import 'package:fluttertube/utils/services/startup_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class _HomePageScreenState extends State<HomePageScreen>
 
   @override
   void initState() {
+    _checkFirstRun();
     _tabController = new TabController(vsync: this, length: 2);
     _tabController.addListener(() {
       if (_tabController.index == 0) {
@@ -127,5 +129,11 @@ class _HomePageScreenState extends State<HomePageScreen>
         ),
       ),
     );
+  }
+
+  Future<void> _checkFirstRun() async {
+    if (await StartupService.isFirstRun()) {
+      await StartupService.writeDefaultData();
+    }
   }
 }

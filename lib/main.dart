@@ -4,9 +4,9 @@ import 'package:fluttertube/state/app_state.dart';
 import 'package:fluttertube/ui/screens/homepage.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(FTApp());
 
-class MyApp extends StatelessWidget {
+class FTApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
