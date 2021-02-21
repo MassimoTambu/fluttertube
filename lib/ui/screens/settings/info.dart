@@ -5,10 +5,10 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           buildInfoDesc(context),
+          // FTRiveAnimation(fullFileName: 'assets/rive/juice.riv'),
           buildInfoVersion(context),
         ],
       ),
@@ -17,38 +17,44 @@ class InfoScreen extends StatelessWidget {
 
   Widget buildInfoDesc(BuildContext context) {
     return Expanded(
-      child: RichText(
-        textAlign: TextAlign.justify,
-        text: TextSpan(
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: RichText(
+          textAlign: TextAlign.justify,
+          text: TextSpan(
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+            children: [
+              TextSpan(text: "Questa semplice App è stata creata da "),
+              TextSpan(
+                text: "Snorf",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(text: ". Seguitemi su "),
+              TextSpan(
+                text: "Only Fanz ",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(text: "per supportarmi! 💖"),
+            ],
           ),
-          children: [
-            TextSpan(text: "Questa semplice App è stata creata da "),
-            TextSpan(
-              text: "Snorf",
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: ". Seguitemi su "),
-            TextSpan(
-              text: "Only Fanz ",
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(text: "per supportarmi! 💖"),
-          ],
         ),
       ),
     );
   }
 
   Widget buildInfoVersion(BuildContext context) {
-    return Text("Versione App: ${AppVersionHelper.version}");
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Text("Versione App: ${AppVersionHelper.version}"),
+    );
   }
 }
