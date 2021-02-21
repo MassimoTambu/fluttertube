@@ -3,7 +3,7 @@ import 'package:fluttertube/ui/screens/settings/general_settings.dart';
 import 'package:fluttertube/ui/screens/settings/info.dart';
 import 'package:fluttertube/ui/widgets/ft_scaffold.dart';
 
-class MainSettingsPage extends StatelessWidget {
+class MainSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +27,7 @@ class MainSettingsPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => FTScaffold(
           appBar: AppBar(),
-          child: GeneralSettingsPage(),
+          child: GeneralSettingsScreen(),
         ),
       ),
     );
@@ -41,7 +41,7 @@ class MainSettingsPage extends StatelessWidget {
             title: Text("Info App"),
             centerTitle: true,
           ),
-          child: InfoPage(),
+          child: InfoScreen(),
         ),
       ),
     );

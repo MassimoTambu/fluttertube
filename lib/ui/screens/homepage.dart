@@ -9,7 +9,6 @@ import 'package:fluttertube/utils/services/permission_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:provider/provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class HomePageScreen extends StatefulWidget {
   @override
@@ -109,7 +108,7 @@ class _HomePageScreenState extends State<HomePageScreen>
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: Theme.of(context).unselectedWidgetColor,
           indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: EdgeInsets.all(5.0),
+          indicatorPadding: const EdgeInsets.all(5.0),
           indicatorColor: Theme.of(context).accentColor,
         ),
       ),
@@ -124,7 +123,7 @@ class _HomePageScreenState extends State<HomePageScreen>
             title: Text('Impostazioni'),
             centerTitle: true,
           ),
-          child: MainSettingsPage(),
+          child: MainSettingsScreen(),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 enum LocalStorageKeyTypes {
   DownloadDir,
-  AudioExtension,
-  VideoExtension,
+  AudioFormat,
+  VideoFormat,
 }
 
 extension ParseToString on LocalStorageKeyTypes {
