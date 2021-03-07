@@ -1,3 +1,3 @@
 class AppVersionHelper {
-  static const version = "1.1.0 - Uagliò Edition";
+  static const version = "0.0.2+2-alfissima - Uagliò Edition";
 }
