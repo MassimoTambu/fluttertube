@@ -10,6 +10,7 @@ class FTThemes {
       ),
       accentColor: Color.fromARGB(255, 57, 73, 171),
       unselectedWidgetColor: Colors.blueGrey[100],
+      typography: Typography.material2018(),
     );
   }
 

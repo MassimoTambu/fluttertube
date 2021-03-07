@@ -15,22 +15,10 @@ class FTFolderField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: InkWell(
-        onTap: () => _openDirPicker(),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(label),
-              Text(path),
-            ],
-          ),
-        ),
-      ),
+    return ListTile(
+      title: Text(label),
+      subtitle: Text(path),
+      onTap: () => _openDirPicker(),
     );
   }
 
