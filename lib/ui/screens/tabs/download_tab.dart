@@ -85,7 +85,7 @@ class _DownloadTabState extends State<DownloadTab>
       onInitDownload: () => setState(() => _dowloading = true),
       onEndDownload: () {
         setState(() => _dowloading = false);
-        SnackBarHelper.showSnackBar(context, message: 'Download Completato!');
+        SnackBarHelper.showSnackBar(context, text: 'Download Completato!');
       },
     );
   }
