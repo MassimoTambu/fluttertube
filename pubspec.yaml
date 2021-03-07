@@ -19,7 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  youtube_explode_dart: ^1.7.5
+  youtube_explode_dart: ^1.8.0-beta.5
   path_provider: ^1.6.5
   googleapis_auth: ^0.2.11+1
   googleapis: ^0.54.0
