@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 class StartupService {
   static Future<bool> isFirstRun() async {
-    final firstRunKey = LocalStorageKeyTypes.FirstRun.toShortString();
+    const firstRunKey = LocalStorageKeyTypes.FirstRun;
 
     if (await LocalStorageService.containsKey(firstRunKey)) {
       print('FIRST RUN: false');
@@ -19,8 +19,8 @@ class StartupService {
   }
 
   static Future<void> writeDefaultData() async {
-    final firstRunKey = LocalStorageKeyTypes.FirstRun.toShortString();
-    final downloadDirKey = LocalStorageKeyTypes.FirstRun.toShortString();
+    const firstRunKey = LocalStorageKeyTypes.FirstRun;
+    const downloadDirKey = LocalStorageKeyTypes.DownloadDir;
 
     String path;
 

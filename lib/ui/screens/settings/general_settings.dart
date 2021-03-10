@@ -10,7 +10,6 @@ class GeneralSettingsScreen extends StatefulWidget {
 }
 
 class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
-  final downloadDirKey = LocalStorageKeyTypes.DownloadDir.toShortString();
   String downloadDir = '';
 
   @override
@@ -35,6 +34,7 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
   }
 
   Future<void> _readAllData() async {
+    const downloadDirKey = LocalStorageKeyTypes.DownloadDir;
     final res = await LocalStorageService.getValue<String>(downloadDirKey);
 
     setState(() => downloadDir = res);
@@ -48,7 +48,8 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
 
     setState(() => downloadDir = newPath);
 
-    final res = await LocalStorageService.setValue(downloadDirKey, newPath);
+    final res = await LocalStorageService.setValue(
+        LocalStorageKeyTypes.DownloadDir, newPath);
 
     SnackBarHelper.showSnackBar(context, text: 'Impostazione salvata!');
 

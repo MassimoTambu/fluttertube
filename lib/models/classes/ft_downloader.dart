@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertube/models/enums/file_format_types.dart';
 import 'package:fluttertube/models/enums/local_storage_key_types.dart';
 import 'package:fluttertube/utils/helpers/dialogs_helper.dart';
 import 'package:fluttertube/utils/services/local_storage_service.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class FTDownloader {
@@ -83,7 +81,7 @@ class FTDownloader {
   }
 
   Future<String> _buildFileNamePath() async {
-    final downloadDirKey = LocalStorageKeyTypes.DownloadDir.toShortString();
+    const downloadDirKey = LocalStorageKeyTypes.DownloadDir;
     final dir = await LocalStorageService.getValue<String>(downloadDirKey);
 
     String fullFileName;

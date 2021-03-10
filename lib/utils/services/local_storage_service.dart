@@ -1,3 +1,4 @@
+import 'package:fluttertube/models/enums/local_storage_key_types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -11,7 +12,8 @@ class LocalStorageService {
   }
 
   /// Ottiene il valore registrato in [key]
-  static Future<T> getValue<T>(String key) async {
+  static Future<T> getValue<T>(LocalStorageKeyTypes lsKey) async {
+    final key = lsKey.toShortString();
     final prefs = await _prefs;
 
     switch (T) {
@@ -40,9 +42,11 @@ class LocalStorageService {
 
   /// Imposta [value] in [key]. Se [value] viene chiamato [deleteValue()] sulla [key].
   /// Ritorna [bool] indicante l'esito.
-  static Future<bool> setValue<T>(String key, T value) async {
+  static Future<bool> setValue<T>(LocalStorageKeyTypes lsKey, T value) async {
+    final key = lsKey.toShortString();
+
     if (value == null) {
-      return deleteValue(key);
+      return deleteValue(lsKey);
     }
 
     final prefs = await _prefs;
@@ -72,14 +76,16 @@ class LocalStorageService {
   }
 
   /// Cancella la entry [key][value] dato [key]
-  static Future<bool> deleteValue(String key) async {
+  static Future<bool> deleteValue(LocalStorageKeyTypes lsKey) async {
+    final key = lsKey.toShortString();
     final prefs = await _prefs;
 
     return prefs.remove(key);
   }
 
   /// Verifica se esiste [key]
-  static Future<bool> containsKey(String key) async {
+  static Future<bool> containsKey(LocalStorageKeyTypes lsKey) async {
+    final key = lsKey.toShortString();
     final prefs = await _prefs;
 
     return prefs.containsKey(key);
