@@ -42,10 +42,10 @@ class _HomePageScreenState extends State<HomePageScreen>
     setState(() {
       _isLoading = true;
     });
-    final ytClient = yt.YoutubeApi(client);
+    final ytClient = yt.YouTubeApi(client);
     try {
       var response = await ytClient.search
-          .list('snippet', q: text, type: 'video', maxResults: 10);
+          .list(['snippet'], q: text, videoType: 'video', maxResults: 10);
 
       setState(() {
         _isLoading = false;

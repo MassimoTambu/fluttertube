@@ -1,9 +1,8 @@
 import 'dart:io';
 
-import 'package:ext_storage/ext_storage.dart';
 import 'package:fluttertube/models/enums/local_storage_key_types.dart';
 import 'package:fluttertube/utils/services/local_storage_service.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 
 class StartupService {
   static Future<bool> isFirstRun() async {
@@ -25,11 +24,9 @@ class StartupService {
     String path;
 
     if (Platform.isAndroid) {
-      path = await ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_DOWNLOADS,
-      );
+      path = (await pathProvider.getDownloadsDirectory()).path;
     } else if (Platform.isIOS) {
-      path = (await getApplicationDocumentsDirectory()).path;
+      path = (await pathProvider.getApplicationDocumentsDirectory()).path;
     } else {
       throw 'Not Supported Platform for get default download Dir';
     }
