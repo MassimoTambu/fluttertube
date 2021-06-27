@@ -3,6 +3,7 @@ enum LocalStorageKeyTypes {
   DownloadDir,
   AudioFormat,
   VideoFormat,
+  None,
 }
 
 extension ParseToString on LocalStorageKeyTypes {

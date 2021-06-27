@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class DialogsHelper {
   static Future<void> showAlertDialog(
     BuildContext context, {
-    @required String title,
-    @required String content,
-    @required String actionText,
+    required String title,
+    required String content,
+    required String actionText,
   }) {
     return showDialog<void>(
       context: context,
@@ -24,9 +24,9 @@ class DialogsHelper {
 
   static Future<void> showErrorAlertDialog(
     BuildContext context, {
-    @required String title,
-    @required String content,
-    @required String actionText,
+    required String title,
+    required String content,
+    required String actionText,
   }) {
     return showDialog<void>(
       context: context,
@@ -44,12 +44,12 @@ class DialogsHelper {
     );
   }
 
-  static Future<bool> showQuestionDialog(
+  static Future<bool?> showQuestionDialog(
     BuildContext context, {
-    @required String title,
-    @required String content,
-    @required String actionTextRefusal,
-    @required String actionTextAcceptance,
+    required String title,
+    required String content,
+    required String actionTextRefusal,
+    required String actionTextAcceptance,
     bool dismissible = false,
   }) {
     return showDialog<bool>(

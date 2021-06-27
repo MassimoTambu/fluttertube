@@ -26,7 +26,7 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
           FTFolderField(
             label: 'Cartella dei download',
             path: downloadDir,
-            folderPickerOpened: _onFolderSelected,
+            folderPickerOpened: (path) => _onFolderSelected(path!),
           ),
         ],
       ),
@@ -37,7 +37,7 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
     const downloadDirKey = LocalStorageKeyTypes.DownloadDir;
     final res = await LocalStorageService.getValue<String>(downloadDirKey);
 
-    setState(() => downloadDir = res);
+    setState(() => downloadDir = res!);
   }
 
   Future<void> _onFolderSelected(String newPath) async {

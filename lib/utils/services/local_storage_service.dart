@@ -12,26 +12,26 @@ class LocalStorageService {
   }
 
   /// Ottiene il valore registrato in [key]
-  static Future<T> getValue<T>(LocalStorageKeyTypes lsKey) async {
+  static Future<T?> getValue<T>(LocalStorageKeyTypes lsKey) async {
     final key = lsKey.toShortString();
     final prefs = await _prefs;
 
     switch (T) {
       case bool:
-        return prefs.getBool(key) as T;
+        return prefs.getBool(key) as T?;
         break;
       case double:
-        return prefs.getDouble(key) as T;
+        return prefs.getDouble(key) as T?;
         break;
       case int:
-        return prefs.getInt(key) as T;
+        return prefs.getInt(key) as T?;
         break;
       case String:
-        return prefs.getString(key) as T;
+        return prefs.getString(key) as T?;
         break;
       case List:
         if (T as List<String> != null)
-          return prefs.getStringList(key) as T;
+          return prefs.getStringList(key) as T?;
         else
           throw 'List Type not managed.';
         break;

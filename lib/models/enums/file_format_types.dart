@@ -9,13 +9,13 @@ enum VideoFormatTypes {
   Ogg,
 }
 
-extension ParseAudioToString on AudioFormatTypes {
+extension ParseAudioToString on AudioFormatTypes? {
   String toShortString() {
     return this.toString().split('.').last.toLowerCase();
   }
 }
 
-extension ParseVideoToString on VideoFormatTypes {
+extension ParseVideoToString on VideoFormatTypes? {
   String toShortString() {
     return this.toString().split('.').last.toLowerCase();
   }

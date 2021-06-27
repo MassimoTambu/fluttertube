@@ -23,6 +23,6 @@ class AppSettingsConst {
         ),
       ],
     ),
-    AppSettingEntity(lsKey: null, name: 'Informazioni'),
+    AppSettingEntity(lsKey: LocalStorageKeyTypes.None, name: 'Informazioni'),
   ];
 }

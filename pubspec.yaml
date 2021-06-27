@@ -11,16 +11,16 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.0.2+2-alfissima
+version: 0.0.3+3-alfissima
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  youtube_explode_dart: ^1.9.0-nullsafety.2
+  youtube_explode_dart: ^1.9.6
   path_provider: ^2.0.1
   googleapis_auth: ^1.1.0
   googleapis: ^2.0.0
@@ -30,7 +30,7 @@ dependencies:
   shared_preferences: ^2.0.4
   google_fonts: ^2.0.0
   file_picker: ^3.0.0
-  # rive: ^0.6.8
+  rive: ^0.7.22
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -53,7 +53,6 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/rive/juice.riv
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

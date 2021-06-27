@@ -10,16 +10,16 @@ class AppSettingEntity
     implements AppSetting, AppSettingHandler, Storable, Descriptable {
   final LocalStorageKeyTypes _lsKey;
   final String _name;
-  final String _description;
-  final void Function() _onChanged;
-  final void Function() _onTap;
+  final String? _description;
+  final void Function()? _onChanged;
+  final void Function()? _onTap;
 
   const AppSettingEntity({
-    @required LocalStorageKeyTypes lsKey,
-    @required String name,
-    String description,
-    void Function() onChanged,
-    void Function() onTap,
+    required LocalStorageKeyTypes lsKey,
+    required String name,
+    String? description,
+    void Function()? onChanged,
+    void Function()? onTap,
   })  : this._lsKey = lsKey,
         this._name = name,
         this._description = description,
@@ -38,11 +38,11 @@ class AppSettingEntity
   String get name => _name;
 
   @override
-  String get description => _description;
+  String get description => _description!;
 
   @override
-  void onChanged() => this._onChanged();
+  void onChanged() => this._onChanged!();
 
   @override
-  void onTap() => this._onTap();
+  void onTap() => this._onTap!();
 }

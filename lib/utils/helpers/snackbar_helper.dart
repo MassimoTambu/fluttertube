@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class SnackBarHelper {
   static void showSnackBar(
     BuildContext context, {
-    @required String text,
-    Duration duration,
+    required String text,
+    Duration? duration,
     SnackBarBehavior snackBarBehavior = SnackBarBehavior.floating,
     // da sistemare
-    AnimationController animationController,
+    AnimationController? animationController,
   }) {
     duration ??= const Duration(milliseconds: 2000);
     final sb = SnackBar(
@@ -15,7 +15,7 @@ class SnackBarHelper {
         text,
         style: Theme.of(context)
             .textTheme
-            .bodyText1
+            .bodyText1!
             .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
       ),

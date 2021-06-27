@@ -6,10 +6,10 @@ class FTSearchElement extends StatelessWidget {
   FTSearchElement(this.result, this.setMediaId);
 
   final SearchResult result;
-  final void Function(String) setMediaId;
+  final void Function(String?) setMediaId;
 
   void _fetchStreamInfo(BuildContext context, SearchResult result) {
-    this.setMediaId(result.id.videoId);
+    this.setMediaId(result.id!.videoId);
   }
 
   @override
@@ -23,20 +23,20 @@ class FTSearchElement extends StatelessWidget {
             child: Tooltip(
               message: "Guarda su Youtube App",
               child: InkWell(
-                onTap: () => onOpenYoutubeApp(context, result.id.videoId),
+                onTap: () => onOpenYoutubeApp(context, result.id!.videoId),
                 child: Row(
                   children: [
                     Image(
                       height: 50,
-                      image: NetworkImage(result.snippet.thumbnails.medium.url),
+                      image: NetworkImage(result.snippet!.thumbnails!.medium!.url!),
                       loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent loadingProgress) {
+                          ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Center(
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes
+                                    loadingProgress.expectedTotalBytes!
                                 : null,
                           ),
                         );
@@ -48,7 +48,7 @@ class FTSearchElement extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            result.snippet.title,
+                            result.snippet!.title!,
                             style: TextStyle(fontSize: 11),
                             overflow: TextOverflow.fade,
                             softWrap: false,
@@ -76,7 +76,7 @@ class FTSearchElement extends StatelessWidget {
     );
   }
 
-  void onOpenYoutubeApp(BuildContext context, String videoId) async {
+  void onOpenYoutubeApp(BuildContext context, String? videoId) async {
     final url = 'https://www.youtube.com/watch?v=$videoId';
     if (await canLaunch(url)) {
       await launch(url);

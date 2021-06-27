@@ -24,7 +24,7 @@ class StartupService {
     String path;
 
     if (Platform.isAndroid) {
-      path = (await pathProvider.getDownloadsDirectory()).path;
+      path = (await pathProvider.getDownloadsDirectory())!.path;
     } else if (Platform.isIOS) {
       path = (await pathProvider.getApplicationDocumentsDirectory()).path;
     } else {

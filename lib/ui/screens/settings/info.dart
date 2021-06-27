@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertube/ui/widgets/ft_rive_animation.dart';
 import 'package:fluttertube/utils/helpers/app_version_helper.dart';
 
 class InfoScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class InfoScreen extends StatelessWidget {
       child: Column(
         children: [
           buildInfoDesc(context),
-          // FTRiveAnimation(fullFileName: 'assets/rive/juice.riv'),
+          FTRiveAnimation(fullFileName: 'assets/rive/doggo.riv'),
           buildInfoVersion(context),
         ],
       ),

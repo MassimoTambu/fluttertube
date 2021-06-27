@@ -17,9 +17,9 @@ class _DownloadTabState extends State<DownloadTab>
   bool _audioOnly = false;
   bool _dowloading = false;
   String _searchUrl = '';
-  Stream<List<int>> stream;
-  yt.StreamInfo _selectedStream;
-  String mediaId;
+  Stream<List<int>>? stream;
+  yt.StreamInfo? _selectedStream;
+  String? mediaId;
   final ftDownloader = FTDownloader();
 
   @override
@@ -61,7 +61,7 @@ class _DownloadTabState extends State<DownloadTab>
 
       ftDownloader.videoInfo = await yte.videos.get(url);
       ftDownloader.streamManifest =
-          await yte.videos.streamsClient.getManifest(ftDownloader.videoInfo.id);
+          await yte.videos.streamsClient.getManifest(ftDownloader.videoInfo!.id);
 
       yte.close();
     } catch (e) {
@@ -78,7 +78,7 @@ class _DownloadTabState extends State<DownloadTab>
     }
   }
 
-  void _download(context, yt.StreamInfo selectedStream) async {
+  void _download(context, yt.StreamInfo? selectedStream) async {
     await ftDownloader.download(
       streamToDownload: selectedStream,
       context: context,
@@ -91,7 +91,7 @@ class _DownloadTabState extends State<DownloadTab>
   }
 
   List<Widget> _createMuxedList(BuildContext context) {
-    final map = ftDownloader.streamManifest.muxed
+    final map = ftDownloader.streamManifest!.muxed
         .sortByVideoQuality()
         .reversed
         .map<Widget>((v) {
@@ -100,7 +100,7 @@ class _DownloadTabState extends State<DownloadTab>
           Radio(
             value: v,
             groupValue: _selectedStream,
-            onChanged: (yt.StreamInfo value) {
+            onChanged: (yt.StreamInfo? value) {
               setState(() {
                 _selectedStream = value;
               });
@@ -118,7 +118,7 @@ class _DownloadTabState extends State<DownloadTab>
   }
 
   List<Widget> _createAudioList(BuildContext context) {
-    final map = ftDownloader.streamManifest.audio
+    final map = ftDownloader.streamManifest!.audio
         .sortByBitrate()
         .reversed
         .map<Widget>((a) {
@@ -127,7 +127,7 @@ class _DownloadTabState extends State<DownloadTab>
           Radio(
             value: a,
             groupValue: _selectedStream,
-            onChanged: (value) {
+            onChanged: (dynamic value) {
               setState(() {
                 _selectedStream = value;
               });
@@ -200,15 +200,15 @@ class _DownloadTabState extends State<DownloadTab>
                 child: Column(
                   children: <Widget>[
                     Text(
-                      ftDownloader.videoInfo.title,
+                      ftDownloader.videoInfo!.title,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text('Durata: ' +
                         (new RegExp(r"(.+)\.\d+$"))
                             .firstMatch(
-                                ftDownloader.videoInfo.duration.toString())
-                            .group(1)),
+                                ftDownloader.videoInfo!.duration.toString())!
+                            .group(1)!),
                   ],
                 ),
               ),

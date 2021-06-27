@@ -4,17 +4,17 @@ import 'package:googleapis/youtube/v3.dart';
 
 class SearchTab extends StatelessWidget {
   final bool isLoading;
-  final String errorMessage;
-  final SearchListResponse response;
+  final String? errorMessage;
+  final SearchListResponse? response;
   final void Function(String) search;
-  final void Function(String) setMediaId;
+  final void Function(String?) setMediaId;
 
   const SearchTab({
-    @required this.isLoading,
-    @required this.errorMessage,
-    @required this.search,
-    @required this.setMediaId,
-    @required this.response,
+    required this.isLoading,
+    required this.errorMessage,
+    required this.search,
+    required this.setMediaId,
+    required this.response,
   });
 
   @override
@@ -50,7 +50,7 @@ class SearchTab extends StatelessWidget {
       );
     } else if (response != null) {
       // CHECK IF IS EMPTY RESULT
-      if (response.items.length == 0) {
+      if (response!.items!.length == 0) {
         child = Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +75,7 @@ class SearchTab extends StatelessWidget {
           child: ListView.builder(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
-            itemCount: response.items.length,
+            itemCount: response!.items!.length,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return Column(
@@ -121,9 +121,9 @@ class SearchTab extends StatelessWidget {
 
   Widget getListChildren(int index) {
     if (response != null && errorMessage == null) {
-      return FTSearchElement(response.items[index], setMediaId);
+      return FTSearchElement(response!.items![index], setMediaId);
     } else if (errorMessage != null) {
-      return Container(child: Text(errorMessage));
+      return Container(child: Text(errorMessage!));
     }
 
     throw 'Not implemented';

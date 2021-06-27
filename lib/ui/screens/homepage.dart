@@ -18,17 +18,17 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen>
     with SingleTickerProviderStateMixin {
-  yt.SearchListResponse _response;
+  yt.SearchListResponse? _response;
   bool _isLoading = false;
-  String _errorMessage;
-  TabController _tabController;
+  String? _errorMessage;
+  TabController? _tabController;
 
   @override
   void initState() {
     _checkFirstRun();
     _tabController = new TabController(vsync: this, length: 2);
-    _tabController.addListener(() {
-      if (_tabController.index == 0) {
+    _tabController!.addListener(() {
+      if (_tabController!.index == 0) {
         Provider.of<AppState>(context, listen: false).mediaId = null;
       }
     });
@@ -45,7 +45,7 @@ class _HomePageScreenState extends State<HomePageScreen>
     final ytClient = yt.YouTubeApi(client);
     try {
       var response = await ytClient.search
-          .list(['snippet'], q: text, videoType: 'video', maxResults: 10);
+          .list(['snippet'], q: text, videoType: 'any', maxResults: 10);
 
       setState(() {
         _isLoading = false;
@@ -60,9 +60,9 @@ class _HomePageScreenState extends State<HomePageScreen>
     }
   }
 
-  void setMediaId(String mediaId) {
-    Provider.of<AppState>(context, listen: false).mediaId = mediaId;
-    _tabController.animateTo(1);
+  void setMediaId(String? mediaId) {
+    context.read<AppState>().mediaId = mediaId;
+    _tabController!.animateTo(1);
   }
 
   @override

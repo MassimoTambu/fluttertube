@@ -8,10 +8,10 @@ import 'package:fluttertube/utils/services/local_storage_service.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class FTDownloader {
-  yt.Video videoInfo;
-  yt.StreamManifest streamManifest;
-  AudioFormatTypes audioFormat;
-  VideoFormatTypes videoFormat;
+  yt.Video? videoInfo;
+  yt.StreamManifest? streamManifest;
+  AudioFormatTypes? audioFormat;
+  VideoFormatTypes? videoFormat;
 
   FTDownloader({
     this.videoInfo,
@@ -22,11 +22,11 @@ class FTDownloader {
 
   /// Download the YT stream following manifest and audio, video formats previously setted.
   Future<void> download({
-    @required yt.StreamInfo streamToDownload,
-    BuildContext context,
-    Future<bool> Function(BuildContext) onFileExists = _onFileExists,
-    void Function() onInitDownload,
-    void Function() onEndDownload,
+    required yt.StreamInfo? streamToDownload,
+    BuildContext? context,
+    Future<bool?> Function(BuildContext?) onFileExists = _onFileExists,
+    void Function()? onInitDownload,
+    void Function()? onEndDownload,
   }) async {
     if (audioFormat == null && videoFormat == null) {
       throw 'File format not selected';
@@ -36,7 +36,7 @@ class FTDownloader {
 
     try {
       if (await file.exists()) {
-        if (!await onFileExists(context)) {
+        if (!await (onFileExists(context) as Future<bool>)) {
           return;
         }
         file.writeAsBytesSync([]);
@@ -44,9 +44,9 @@ class FTDownloader {
 
       final yte = yt.YoutubeExplode();
 
-      onInitDownload();
+      onInitDownload!();
 
-      final stream = yte.videos.streamsClient.get(streamToDownload);
+      final stream = yte.videos.streamsClient.get(streamToDownload!);
 
       // Open a file for writing.
       final fileStream = file.openWrite();
@@ -66,13 +66,13 @@ class FTDownloader {
       //TODO ERROR DIALOG
       throw e;
     } finally {
-      onEndDownload();
+      onEndDownload!();
     }
   }
 
-  static Future<bool> _onFileExists(BuildContext context) async {
+  static Future<bool?> _onFileExists(BuildContext? context) async {
     return await DialogsHelper.showQuestionDialog(
-      context,
+      context!,
       title: 'File già presente',
       content: 'Questo file esiste già, vuoi sovrascriverlo?',
       actionTextAcceptance: 'Sì',
@@ -88,9 +88,9 @@ class FTDownloader {
 
     // Check File Format
     if (videoFormat != null) {
-      fullFileName = '$dir/${videoInfo.title}.${videoFormat.toShortString()}';
+      fullFileName = '$dir/${videoInfo!.title}.${videoFormat.toShortString()}';
     } else {
-      fullFileName = '$dir/${videoInfo.title}.${audioFormat.toShortString()}';
+      fullFileName = '$dir/${videoInfo!.title}.${audioFormat.toShortString()}';
     }
 
     return fullFileName;
