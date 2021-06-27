@@ -9,7 +9,7 @@ class InfoScreen extends StatelessWidget {
       child: Column(
         children: [
           buildInfoDesc(context),
-          FTRiveAnimation(fullFileName: 'assets/rive/doggo.riv'),
+          FTRiveAnimation(url: 'https://cdn.rive.app/animations/vehicles.riv'),
           buildInfoVersion(context),
         ],
       ),

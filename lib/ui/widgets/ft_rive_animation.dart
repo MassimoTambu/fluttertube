@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
 class FTRiveAnimation extends StatefulWidget {
-  final String fullFileName;
+  final String url;
 
-  const FTRiveAnimation({Key? key, required this.fullFileName})
-      : super(key: key);
+  const FTRiveAnimation({Key? key, required this.url}) : super(key: key);
 
   @override
   _FTRiveAnimationState createState() => _FTRiveAnimationState();
@@ -37,7 +36,7 @@ class _FTRiveAnimationState extends State<FTRiveAnimation> {
       child: SizedBox(
         height: 200,
         child: RiveAnimation.network(
-          'https://cdn.rive.app/animations/vehicles.riv',
+          widget.url,
           animations: const ['idle', 'curves'],
           controllers: [_controller],
         ),
