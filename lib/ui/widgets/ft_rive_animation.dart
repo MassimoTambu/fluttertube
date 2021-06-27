@@ -34,11 +34,12 @@ class _FTRiveAnimationState extends State<FTRiveAnimation> {
     return InkWell(
       onTap: () => _isPlaying ? null : _controller.isActive = true,
       child: SizedBox(
-        height: 200,
+        height: 300,
         child: RiveAnimation.network(
           widget.url,
           animations: const ['idle', 'curves'],
           controllers: [_controller],
+          fit: BoxFit.cover,
         ),
       ),
     );
